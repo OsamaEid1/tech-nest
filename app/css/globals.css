@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  text-align: right;
+  color: white;
+}
+
+*:focus {
+  outline: white 1px solid;
+}
+
+::selection {
+  background-color: black;
+  color: #00A9C3;
+}
+
+body {
+  background-color: #F7F8FA;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 1.17em;
+  font-weight: 800;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: 800;
+}
+
+h5 {
+  font-size: 0.83em;
+  font-weight: 800;
+}
+
+h6 {
+  font-size: 0.67em;
+  font-weight: 800;
+}
+
+input {
+  color: black;
+}
+
+a.active {
+  background-color: #2F2F3D;
+  color: #7ba1fb
+}
+
+.main-input {
+  @apply rounded-lg p-2 duration-300 focus:outline focus:outline-blue-500 text-black max-w-full
+}
+
+.err-msg {
+  @apply text-red-500 text-base block mt-2;
+}
