@@ -26,7 +26,7 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
 
     return (
         <div dir='ltr'
-            className="fixed inset-0 w-screen h-screen flex z-50 justify-center items-center bg-black/30"
+            className="fixed inset-0 w-screen min-h-screen flex z-50 justify-center items-center bg-black/30"
         >
             <div id="popup-modal"
                 className="overflow-y-auto overflow-x-hidden w-fit h-fit max-h-full

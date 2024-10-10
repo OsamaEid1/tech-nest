@@ -1,5 +1,5 @@
 "use client"
-import MainButton from "components/ui/MainButton";
+import MainButton from "components/ui/form/MainButton";
 // import { signIn } from "./helpers/auth/signIn";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import Image from "next/image";
 // import { adminSidebarLinks } from "./helpers/constants";
 import Loading from "components/ui/Loading";
 import { useState } from "react";
-import MainInput from "components/ui/MainInput";
+import MainInput from "components/ui/form/MainInput";
 
 // Next
 // import type { Metadata } from "next";
@@ -53,7 +53,7 @@ const SignIn = () => {
 
 
     return(
-        <div className="h-screen flex justify-center items-center relative">
+        <div className="min-h-screen flex justify-center items-center relative">
             {/* {loading && (
                 // <Loading />
             )} */}

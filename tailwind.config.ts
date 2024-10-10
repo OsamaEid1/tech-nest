@@ -11,7 +11,7 @@ const config: Config = {
         layouts: "#000000",
         secBoxesColor: "#F0F0F5",
         hovers: "#00A9C3",
-        borders: "#E0E0E0",
+        light: "#E0E0E0",
         shadows: "#D6D6D6",
         secTextColor: "#333333",
         notes: "#FF9800",

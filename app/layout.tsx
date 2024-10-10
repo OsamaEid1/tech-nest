@@ -3,7 +3,7 @@ import "./css/globals.css";
 
 export const metadata: Metadata = {
   title: "TechNest",
-  description: "All tech articles you wnat!",
+  description: "All tech articles you want!",
 };
 
 export default function RootLayout({

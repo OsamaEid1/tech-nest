@@ -6,7 +6,7 @@ const Sidebar = ({ links }) => {
     return (
         <aside
             className='
-                w-[15vw] h-screen flex flex-col items-center justify-center text-white font-semibold
+                w-[15vw] min-h-screen flex flex-col items-center justify-center text-white font-semibold
                 bg-secondary p-5
                 fixed right-0 top-0 bottom-0
             '

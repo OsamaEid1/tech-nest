@@ -1,4 +1,4 @@
-import MainButton from "../ui/MainButton"
+import MainButton from "../ui/form/MainButton"
 
 const Header = ({ }) => {
     return (

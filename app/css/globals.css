@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  text-align: right;
-  color: white;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 *:focus {
-  outline: white 1px solid;
+  outline: #00A9C3 1px solid;
 }
 
 ::selection {
@@ -20,9 +21,13 @@ body {
   background-color: #F7F8FA;
 }
 
+img, video {
+  height: revert-layer;
+}
+
 h1 {
   font-size: 2em;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 h2 {
@@ -32,22 +37,22 @@ h2 {
 
 h3 {
   font-size: 1.17em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 h4 {
   font-size: 1em;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 h5 {
   font-size: 0.83em;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 h6 {
   font-size: 0.67em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 input {
@@ -59,10 +64,25 @@ a.active {
   color: #7ba1fb
 }
 
-.main-input {
-  @apply rounded-lg p-2 duration-300 focus:outline focus:outline-blue-500 text-black max-w-full
-}
-
 .err-msg {
   @apply text-red-500 text-base block mt-2;
+}
+
+.slider::-webkit-scrollbar {
+  width: 15px;
+  /* width of the entire scrollbar */
+}
+
+.slider::-webkit-scrollbar-track {
+  background: rgb(237, 237, 237);
+}
+
+.slider::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.80);
+  border-radius: 20px;
+  border: 1px solid #00A9C3;
+}
+
+.slider::-webkit-scrollbar-thumb:hover {
+  background-color: black;
 }
