@@ -6,7 +6,7 @@ function ProfileSidebar() {
     return (
         <div className="text-center">
             <Image
-                src="/images/my-pic.png"
+                src="/assets/images/my-pic.png"
                 alt="User Image"
                 width={150}
                 height={150}
@@ -60,7 +60,7 @@ function ProfileSidebar() {
                     </li>
                 </ul>
                 <Link 
-                    href="/manage-topics"
+                    href="/manage-following-topics"
                     className="duration-300 underline hover:no-underline hover:text-hovers"
                 >Manage Your Following Topics</Link>
             </div>

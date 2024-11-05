@@ -31,7 +31,7 @@ function UserInfoForm({ userInfo, handleSubmit, loading, submitButtonText='submi
                 id="name"
                 type="name" 
                 placeholder="Name" 
-                inputStyles="mb-3 w-[270px]"
+                inputStyles="mb-3 w-[300px] max-w-full"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required={true}

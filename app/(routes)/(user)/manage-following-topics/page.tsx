@@ -1,16 +1,12 @@
 "use client"
-
 import MainButton from 'components/ui/form/MainButton'
 import SelectTopicsBox from './components/SelectTopicsBox'
 import Loading from 'components/ui/Loading'
 import { useState } from 'react'
-import SelectedTopics from './components/SelectedTopics'
 
 function ManageFollowingTopics() {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-
-
 
     return (
         <div className="min-h-screen flex justify-center items-center relative text-left py-14">

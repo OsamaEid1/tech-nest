@@ -59,7 +59,7 @@ const SignIn = () => {
             )} */}
             <div className="
                     text-lg bg-white shadow-xl shadow-shadows w-fit max-w-[280px] flex flex-col justify-center items-center
-                    py-3 px-5 rounded-main text-black
+                    py-7 px-5 rounded-main text-black
                 ">
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign In</h2>
                 <form className="flex flex-col text-center" onSubmit={handleSubmit}>
@@ -67,7 +67,7 @@ const SignIn = () => {
                         id="email"
                         type="email" 
                         placeholder="Email" 
-                        inputStyles="mb-3 min-w-[230px] max-w-full"
+                        inputStyles="mb-3 w-[230px] max-w-full"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required={true}
