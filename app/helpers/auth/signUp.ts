@@ -7,7 +7,7 @@ export const signUp = async (formData: FormData) => {
 
         if (response.ok) {
             const data = await response.json();
-            return data;
+            return data.user;
         } else {
             const data = await response.json();
             throw data.error;

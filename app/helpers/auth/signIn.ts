@@ -14,5 +14,5 @@ export const signIn = async (email: string, password: string) => {
         throw data.error;
     }
 
-    return data;
+    return data.user;
 };

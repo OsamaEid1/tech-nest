@@ -26,4 +26,4 @@ export const userSlice = createSlice({
     }
 });
 
-export const { addToUserInfo } = userSlice.actions;
+export const { addToUserInfo, setUSerInfo } = userSlice.actions;

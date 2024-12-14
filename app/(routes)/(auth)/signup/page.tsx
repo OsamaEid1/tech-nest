@@ -6,6 +6,7 @@ import UserInfoForm from "components/ui/form/UserInfoForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "state/hooks";
+import { setUSerInfo } from "state/slices/userSlice";
 
 
 const SignUp = () => {
@@ -14,7 +15,7 @@ const SignUp = () => {
     const [picFile, setPicFile] = useState<File | null>(null);
 
     const dispatch = useAppDispatch();
-    const userInfo = useAppSelector(state => state.user.userInfoForm);
+    const userInfoForm = useAppSelector(state => state.user.userInfoForm);
     
     const router = useRouter();
     const handleSubmit = async (e: React.FormEvent) => {
@@ -24,12 +25,12 @@ const SignUp = () => {
         setError(null);
 
         // Form validation
-        if (!picFile || !userInfo.name || !userInfo.email || !userInfo.password || !userInfo.rePassword) {
+        if (!picFile || !userInfoForm.name || !userInfoForm.email || !userInfoForm.password || !userInfoForm.rePassword) {
             setError("Please fill in all fields including profile picture !");
             setIsLoading(false);
             return;
         }
-        if (userInfo.password !== userInfo.rePassword) {
+        if (userInfoForm.password !== userInfoForm.rePassword) {
             setError("Passwords do not match !");
             setIsLoading(false);
             return;
@@ -37,16 +38,17 @@ const SignUp = () => {
 
         // Initialize Form Data
         const formData = new FormData();
-        formData.append("name", userInfo.name);
-        formData.append("email", userInfo.email);
-        formData.append("password", userInfo.password);
+        formData.append("name", userInfoForm.name);
+        formData.append("email", userInfoForm.email);
+        formData.append("password", userInfoForm.password);
         formData.append("picFile", picFile);
 
         // Perform Signing Up
         try {
-            await signUp(formData);
+            const userInfo = await signUp(formData);
             alert("You have successfully Signed Up !");
-            router.replace('/'); // Redirect to Home Page
+            dispatch(setUSerInfo(userInfo));
+            router.replace('/');
         } catch (error: any) {
             setError(error);
         } finally {

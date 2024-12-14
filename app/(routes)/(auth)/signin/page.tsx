@@ -6,47 +6,43 @@ import Loading from "components/ui/Loading";
 import { useState } from "react";
 import MainInput from "components/ui/form/MainInput";
 import Link from "next/link";
+import { signIn } from "app/helpers/auth/signIn";
+import { useAppDispatch } from "state/hooks";
 
 
 const SignIn = () => {
     const [password, setPass] = useState("");
     const [email, setEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
-
     const [loading, setIsLoading] = useState(false);
 
+    const dispatch = useAppDispatch();
     const router = useRouter();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
 
-        // try {
-        //     const data = await signIn(email, password);
-        //     // Handle redirection based on user role
-        //     if (data.user.role === "ADMIN") {
-        //         localStorage.setItem("sidebar-links", JSON.stringify(adminSidebarLinks));
-        //         router.replace('/admin/display-rooms');
-        //     } else if (data.user.role === 'SUPER_ADMIN') {
-        //         localStorage.setItem("sidebar-links", JSON.stringify(superAdminSidebarLinks))
-        //         router.replace('/super-admin/dashboard');
-        //     } else {
-        //         alert('ليس لديك صلاحية للدخول، راجع مدير النظم!');
-        //         window.location.reload();
-        //     }
-        // } catch (error: any) {
-        //     setError(errormessage);
-        // } finally {
-        //     setIsLoading(false);
-        // }
+        try {
+            const userInfo = await signIn(email, password);
+            // Handle redirection based on user role
+            if (userInfo.role === "ADMIN") {
+                dispatch(userInfo);
+                router.replace('/admin/dashboard');
+            } else {
+                dispatch(userInfo);
+                router.replace('/');
+            }
+        } catch (error: any) {
+            setError(error);
+            setIsLoading(false);
+        }
     };
 
 
     return(
         <div className="min-h-screen flex justify-center items-center relative">
-            {/* {loading && (
-                // <Loading />
-            )} */}
+            {loading && (<Loading />)}
             <div className="main-card xl:w-[20vw]">
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign In</h2>
                 <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
