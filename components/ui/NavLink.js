@@ -14,7 +14,7 @@ export default function NavLink({ href, exact, children, className, ...props }) 
 
 
     return (
-        <Link href={href} dir="ltr" className={`${isActive ? "active" : ""} ${className}`} {...props}>
+        <Link href={href} prefetch={true} className={`${isActive ? "active" : ""} ${className}`} {...props}>
             {children}
         </Link>
     );

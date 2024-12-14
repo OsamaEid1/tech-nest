@@ -1,15 +1,39 @@
+interface LikeData {
+    userId: string,
+    userName: string,
+    userPicPath: string,
+    createdAt: string
+}
+interface CommentData {
+    userId: string,
+    userName: string,
+    userPicPath: string,
+    content: string,
+    createdAt: string
+}
+
 type UserInfo = {
-    img: string;
+    id?: string;
     name: string;
     email: string;
     password: string;
+    pic: string;
+    followingTopicsNames: string[];
+    savedArticlesIDs: string[];
+    isActive?: Boolean;
+    role: String;
+    createdAt?: string;
 }
 
 const INITIAL_USER_INFO : UserInfo = {
-    img: "",
     name: "",
     email: "",
     password: "",
+    pic: "",
+    followingTopicsNames: [''],
+    savedArticlesIDs: [''],
+    role: "",
+    createdAt: "",
 } 
 
 const TAGS: string[] = [
@@ -54,7 +78,8 @@ export {
     TAGS,
     MAIN_TAGS
 }
-
 export type {
+    LikeData,
+    CommentData,
     UserInfo,
 }

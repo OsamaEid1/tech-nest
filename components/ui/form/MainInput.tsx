@@ -1,20 +1,20 @@
 type InputProps = {
-    id: any;
+    id?: any;
     type: string;
     placeholder: string;
-    value: string | number | readonly string[];
+    labelTitle?: string;
+    value?: string | number | readonly string[];
     arrValue?: string[];
     min?: number;
     max?: number;
-    onChange: (e?: any) => void;
-    required: boolean;
+    onChange?: (e?: any) => void;
+    required?: boolean;
     disabled?: boolean;
     className?: string;
     inputStyles?: string;
 }
 
-function MainInput({ id, type, placeholder, value, arrValue, min, max, onChange, required, disabled, className, inputStyles } : InputProps) {
-
+function MainInput({ id, type, placeholder, labelTitle, value, arrValue, min, max, onChange, required=true, disabled, className, inputStyles } : InputProps) {
     return (
         <div className="w-full">
             <div className="relative w-full">
@@ -24,12 +24,11 @@ function MainInput({ id, type, placeholder, value, arrValue, min, max, onChange,
                         text-base border border-slate-200 px-3 py-2 transition duration-300 ease
                         hover:border-slate-300 shadow-sm focus:shadow rounded-lg
                         focus:outline-2 focus:outline-hovers text-black max-w-full
-                        ${inputStyles}
+                        ${disabled ? '!bg-gray-500 border-none' : ''} ${inputStyles}
                     `}
-                    
-                    id={`input-field-${id}`}
+                    id={`input-field-${id || placeholder}`}
                     type={type}
-                    value={value}
+                    value={value || ''}
                     min={min}
                     max={max}
                     onChange={onChange}
@@ -38,14 +37,15 @@ function MainInput({ id, type, placeholder, value, arrValue, min, max, onChange,
                 />
                 <label
                     className={`
-                        absolute cursor-text bg-white px-2 left-2 top-2 text-slate-400
-                        text-base transition-all transform origin-left max-w-[calc(100%-10px)] text-nowrap overflow-hidden text-ellipsis
-                        ${(arrValue && arrValue.length !== 0) || (!arrValue && value) ?
-                            "!-top-3 left-2 scale-90 shadow-md rounded-lg px-2" :
-                            "peer-focus:-top-4 peer-focus:left-2 peer-focus:scale-90 peer-focus:shadow-md peer-focus:rounded-lg peer-focus:px-2"}
+                        absolute cursor-text bg-white px-2 left-1 top-2 text-slate-400
+                        text-base transition-all transform origin-right max-w-[calc(100%-10px)] text-nowrap overflow-hidden text-ellipsis
+                        ${(arrValue && arrValue.length !== 0 && arrValue[0] !== '') || (!arrValue && value) ?
+                            "!-top-4 left-0 scale-90 rounded-lg px-2" :
+                            "peer-focus:-top-4 peer-focus:left-0 peer-focus:scale-90 peer-focus:rounded-lg peer-focus:px-2"}
                         ${className}    
                     `}
-                    htmlFor={`input-field-${id}`} /**** */
+                    title={labelTitle}
+                    htmlFor={`input-field-${id || placeholder}`} /**** */
                 >
                     { placeholder }
                 </label>

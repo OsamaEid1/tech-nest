@@ -64,6 +64,11 @@ a.active {
   color: #7ba1fb
 }
 
+.main-card {
+  @apply md:w-[30vw] lg:w-[35vw] xl:w-[26vw] text-lg bg-white shadow-xl shadow-shadows w-fit flex flex-col justify-center items-center
+                    pb-3 pt-2 px-6 rounded-main text-black relative;
+}
+
 .err-msg {
   @apply text-red-500 text-base block mt-2;
 }

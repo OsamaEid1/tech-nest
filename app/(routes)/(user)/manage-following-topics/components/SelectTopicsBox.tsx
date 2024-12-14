@@ -30,6 +30,9 @@ function SelectTopicsBox() {
             'Algorithms'
     ]
 
+    // useGetFollowingTopics => {userInfo => id} = useGetUserInfo() =>  return followingTopicsNames = selectedTopics
+    // topics = fetchAllTopics
+
 
     const [topics, setTopics] = useState<string []>(allTopics);
     const [selectedTopics, setSelectedTopics] = useState<string []>([]);

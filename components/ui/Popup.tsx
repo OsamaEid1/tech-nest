@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 type PopupProps = {
     type?: (string | "normal" | "success" | "delete"),

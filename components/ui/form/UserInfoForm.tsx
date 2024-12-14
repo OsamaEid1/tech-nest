@@ -1,66 +1,61 @@
 "use client"
-import { useState } from "react";
+import { memo, useState } from "react";
 import MainInput from "components/ui/form/MainInput";
 import ImageUploader from "components/ui/form/ImageUploader";
 import MainButton from "components/ui/form/MainButton";
-import Loading from "components/ui/Loading";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { UserInfo } from "components/constants";
+import { UserInfo } from "app/helpers/constants";
+import { useAppDispatch, useAppSelector } from "state/hooks";
+import { addToUserInfo } from "state/slices/userSlice";
 
 type Props = {
     userInfo: UserInfo;
-    handleSubmit: (e: React.FormEvent) => {};
+    handleSubmit: (e: React.FormEvent) => void;
     loading: boolean;
     submitButtonText?: string;
+    setPicFile: (file: File) => void
 };
 
-function UserInfoForm({ userInfo, handleSubmit, loading, submitButtonText='submit'} : Props) {
-    const [name, setName] = useState(userInfo?.name);
-    const [email, setEmail] = useState(userInfo?.email);
-    const [password, setPass] = useState(userInfo?.password);
-    const [rePassword, setRePass] = useState('');
-    
+const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPicFile, loading, submitButtonText='submit'} : Props) {
+    const dispatch = useAppDispatch();
+    const updatedUserInfo = useAppSelector(state => state.user.userInfo);
+
     return (
-        <form className="flex flex-col text-center" onSubmit={handleSubmit}>
-            {loading && (
-                <Loading />
-            )}
-            <ImageUploader />
+        <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
+            <ImageUploader setPicFile={setPicFile} />
             <MainInput 
                 id="name"
                 type="name" 
                 placeholder="Name" 
-                inputStyles="mb-3 w-[300px] max-w-full"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                inputStyles="mb-4 w-[350px] max-w-full"
+                value={userInfo?.name || updatedUserInfo.name}
+                onChange={(e) => dispatch(addToUserInfo({name: e.target.value}))}
                 required={true}
             />
             <MainInput 
                 id="email"
                 type="email" 
                 placeholder="Email" 
-                inputStyles="mb-3"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                inputStyles="mb-4"
+                value={userInfo?.email || updatedUserInfo.email}
+                onChange={(e) => dispatch(addToUserInfo({email: e.target.value}))}
                 required={true}
-                />
+            />
             <MainInput 
                 id="pass"
                 type="password" 
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPass(e.target.value)}
-                inputStyles="mb-3"
+                value={userInfo?.password || updatedUserInfo.password}
+                onChange={(e) => dispatch(addToUserInfo({password: e.target.value}))}
+                inputStyles="mb-4"
                 required={true}
                 />
             <MainInput 
                 id="re-pass"
                 type="password" 
-                placeholder="Password"
-                value={rePassword}
-                onChange={(e) => setRePass(e.target.value)}
-                inputStyles="mb-3"
+                placeholder="Confirm Password"
+                value={updatedUserInfo.rePassword}
+                onChange={(e) => dispatch(addToUserInfo({rePassword: e.target.value}))}
+                inputStyles="mb-4"
                 required={true}
             />
             <MainButton
@@ -75,6 +70,6 @@ function UserInfoForm({ userInfo, handleSubmit, loading, submitButtonText='submi
             </MainButton>
         </form>
     )
-}
+});
 
-export default UserInfoForm
+export default UserInfoForm;

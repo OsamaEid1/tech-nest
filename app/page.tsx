@@ -1,4 +1,4 @@
-import { TAGS, MAIN_TAGS } from "components/constants";
+import { TAGS, MAIN_TAGS } from "app/helpers/constants";
 import Header from "components/layout/Header";
 import MainCard from "components/home/maincard/MainCard";
 import Sidebar from "components/home/Sidebar";

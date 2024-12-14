@@ -1,23 +1,21 @@
-import type { Metadata } from "next";
+'use client'
 import "./css/globals.css";
+import { Provider } from "react-redux";
+import { store } from "state/store";
 
-export const metadata: Metadata = {
-  title: "TechNest",
-  description: "All tech articles you want!",
-};
 
 export default function RootLayout({
     children,
-  }: Readonly<{
+}: Readonly<{
     children: React.ReactNode;
-  }>) {
+}>) {
   return (
-    <html lang="en">
-      <body
-        className={``}
-      >
-        {children}
-      </body>
-    </html>
+    <Provider store={store}>
+      <html lang="en">
+        <body>
+          {children}
+        </body>
+      </html>
+    </Provider>
   );
 }

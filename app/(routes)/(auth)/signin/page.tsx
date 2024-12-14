@@ -1,22 +1,12 @@
 "use client"
 import MainButton from "components/ui/form/MainButton";
-// import { signIn } from "./helpers/auth/signIn";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-// Constants
-// import { superAdminSidebarLinks } from "./helpers/constants";
-// import { adminSidebarLinks } from "./helpers/constants";
 import Loading from "components/ui/Loading";
 import { useState } from "react";
 import MainInput from "components/ui/form/MainInput";
+import Link from "next/link";
 
-// Next
-// import type { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//     title: "PS Hub | Super Admin",
-// };
 
 const SignIn = () => {
     const [password, setPass] = useState("");
@@ -57,28 +47,22 @@ const SignIn = () => {
             {/* {loading && (
                 // <Loading />
             )} */}
-            <div className="
-                    text-lg bg-white shadow-xl shadow-shadows w-fit max-w-[280px] flex flex-col justify-center items-center
-                    py-7 px-5 rounded-main text-black
-                ">
+            <div className="main-card xl:w-[20vw]">
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign In</h2>
-                <form className="flex flex-col text-center" onSubmit={handleSubmit}>
+                <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
                     <MainInput 
-                        id="email"
                         type="email" 
                         placeholder="Email" 
-                        inputStyles="mb-3 w-[230px] max-w-full"
+                        inputStyles="mb-4"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required={true}
                     />
                     <MainInput 
-                        id="pass"
                         type="password" 
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPass(e.target.value)}
-                        inputStyles="mb-3"
                         required={true}
                     />
                     {error && <span className="err-msg mt-2">{ error }</span>}
@@ -92,6 +76,11 @@ const SignIn = () => {
                     >
                         Sign In
                     </MainButton>
+                    <Link href="/signup"
+                        className="text-sm text-left underline mt-2 duration-300 hover:text-hovers focus:outline-none"
+                    >
+                        New User? Sign Up 
+                    </Link>
                 </form>
             </div>
         </div>

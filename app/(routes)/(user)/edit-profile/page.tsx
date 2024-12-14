@@ -1,5 +1,5 @@
 "use client"
-import { INITIAL_USER_INFO } from "components/constants";
+import { INITIAL_USER_INFO } from "app/helpers/constants";
 import UserInfoForm from "components/ui/form/UserInfoForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
