@@ -11,10 +11,8 @@ export const signIn = async (email: string, password: string) => {
         });
     
         
-        console.log("11 response: ", response);
         if (response.ok) {
             const data = await response.json();
-            console.log("22 ", data);
             return data.user as UserInfo;
         } else {
             const errorData = await response.json();
@@ -22,7 +20,7 @@ export const signIn = async (email: string, password: string) => {
         }
         
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw error;
     }
 };

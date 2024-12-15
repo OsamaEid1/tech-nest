@@ -5,6 +5,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
+import Link from "next/link";
 
 
 export default function Sidebar({ items }) {
@@ -45,9 +46,8 @@ export default function Sidebar({ items }) {
               </button>
             );
           })}
-         
         </div>
-        <p className="text-green-400 cursor-pointer">See more topics</p>
+        <Link href="/manage-following-topics" className="text-green-400 cursor-pointer underline duration:300 hover:no-underline">See more topics</Link>
       </div>
     </div>
   );

@@ -70,7 +70,7 @@ a.active {
 }
 
 .err-msg {
-  @apply text-red-500 text-sm text-right block mt-2;
+  @apply text-red-500 text-base text-right block mt-2;
 }
 
 .slider::-webkit-scrollbar {
@@ -90,4 +90,13 @@ a.active {
 
 .slider::-webkit-scrollbar-thumb:hover {
   background-color: black;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.animate-spin-fast {
+    animation: spin 0.5s linear infinite;
 }

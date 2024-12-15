@@ -34,7 +34,13 @@ const INITIAL_USER_INFO : UserInfo = {
     savedArticlesIDs: [''],
     role: "",
     createdAt: "",
-} 
+};
+
+interface Topic {
+    id: string;
+    name: string;
+    createdAt: Date;
+};
 
 const TAGS: string[] = [
   "Blockchain",
@@ -82,4 +88,5 @@ export type {
     LikeData,
     CommentData,
     UserInfo,
+    Topic
 }
