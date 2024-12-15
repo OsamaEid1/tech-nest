@@ -1,10 +1,11 @@
+import { serialize } from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import cookie from 'cookie';
+
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         // Clear the token cookie by setting it to expire immediately
-        res.setHeader('Set-Cookie', cookie.serialize('token', '', {
+        res.setHeader('Set-Cookie', serialize('token', '', {
             httpOnly: true, // Ensures the cookie is not accessible via JavaScript
             secure: process.env.NODE_ENV === 'production', // Secure cookie in production
             sameSite: 'strict', // Prevents CSRF attacks
