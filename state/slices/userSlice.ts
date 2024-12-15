@@ -19,11 +19,11 @@ export const userSlice = createSlice({
             const updatedUserInfo = action.payload;
             state.userInfoForm = { ...state.userInfoForm, ...updatedUserInfo };
         },
-        setUSerInfo(state, action) {
+        setUserInfo(state, action) {
             const updatedUserInfo = action.payload;
-            state.userInfoForm = { ...state.userInfo, ...updatedUserInfo };
+            state.userInfo = { ...state.userInfo, ...updatedUserInfo };
         }
     }
 });
 
-export const { addToUserInfo, setUSerInfo } = userSlice.actions;
+export const { addToUserInfo, setUserInfo } = userSlice.actions;

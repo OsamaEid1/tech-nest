@@ -1,5 +1,5 @@
 "use client"
-import { memo, useState } from "react";
+import { memo } from "react";
 import MainInput from "components/ui/form/MainInput";
 import ImageUploader from "components/ui/form/ImageUploader";
 import MainButton from "components/ui/form/MainButton";
@@ -10,14 +10,14 @@ import { addToUserInfo } from "state/slices/userSlice";
 type Props = {
     userInfo: UserInfo;
     handleSubmit: (e: React.FormEvent) => void;
-    loading: boolean;
+    loading?: boolean;
     submitButtonText?: string;
     setPicFile: (file: File) => void
 };
 
 const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPicFile, loading, submitButtonText='submit'} : Props) {
     const dispatch = useAppDispatch();
-    const updatedUserInfo = useAppSelector(state => state.user.userInfo);
+    const updatedUserInfo = useAppSelector(state => state.user.userInfoForm);
 
     return (
         <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>

@@ -6,7 +6,7 @@ import UserInfoForm from "components/ui/form/UserInfoForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "state/hooks";
-import { setUSerInfo } from "state/slices/userSlice";
+import { setUserInfo } from "state/slices/userSlice";
 
 
 const SignUp = () => {
@@ -47,7 +47,7 @@ const SignUp = () => {
         try {
             const userInfo = await signUp(formData);
             alert("You have successfully Signed Up !");
-            dispatch(setUSerInfo(userInfo));
+            dispatch(setUserInfo(userInfo));
             router.replace('/');
         } catch (error: any) {
             setError(error);
@@ -63,8 +63,8 @@ const SignUp = () => {
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign Up</h2>
                 <UserInfoForm 
                     userInfo={INITIAL_USER_INFO}    
-                    handleSubmit={handleSubmit}
                     setPicFile={setPicFile}
+                    handleSubmit={handleSubmit}
                     loading={loading}
                     submitButtonText="Sign Up"
                 />

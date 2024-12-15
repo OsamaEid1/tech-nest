@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import cookie from 'cookie'
+import { serialize } from "cookie";
 
 const prisma = new PrismaClient();
 
@@ -41,24 +41,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 Buffer.from(SECRET_KEY),
                 { expiresIn: '24h' }
             );
-
             // Set Token to Cookies
-            res.setHeader('Set-Cookie', cookie.serialize('token', token, {
-                httpOnly: false, /**/
+            res.setHeader('Set-Cookie', serialize('token', token, {
+                httpOnly: true, // Secure and HttpOnly cookie
                 secure: process.env.NODE_ENV === 'production', // set to true in production
                 sameSite: 'strict',
                 maxAge: 24 * 60 * 60, // 24 hours
                 path: '/',
             }));
 
-
             // Return the token and user information without the password
             const userWithoutPassword = { ...user };
             delete (userWithoutPassword as any).password; //Mark as `any` to avoid TypeScript error
-            res.status(200).json({ token, user });
+            
+            return res.status(200).json({ user: userWithoutPassword });
         } catch (error) {
             console.error("Something happened while fetching user info! ", error)
-            res.status(500).json({ error: 'حدث خطأ أثناء محاولة تسجيل الدخول، حاول ثانيةً!' });
+            return res.status(500).json({ error: 'حدث خطأ أثناء محاولة تسجيل الدخول، حاول ثانيةً!' });
         }
     } else {
         res.setHeader('Allow', ['POST']);

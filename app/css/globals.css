@@ -70,7 +70,7 @@ a.active {
 }
 
 .err-msg {
-  @apply text-red-500 text-base block mt-2;
+  @apply text-red-500 text-sm text-right block mt-2;
 }
 
 .slider::-webkit-scrollbar {

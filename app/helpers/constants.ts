@@ -16,7 +16,7 @@ type UserInfo = {
     id?: string;
     name: string;
     email: string;
-    password: string;
+    password?: string;
     pic: string;
     followingTopicsNames: string[];
     savedArticlesIDs: string[];

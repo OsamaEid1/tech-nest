@@ -8,6 +8,7 @@ import MainInput from "components/ui/form/MainInput";
 import Link from "next/link";
 import { signIn } from "app/helpers/auth/signIn";
 import { useAppDispatch } from "state/hooks";
+import { setUserInfo } from "state/slices/userSlice";
 
 
 const SignIn = () => {
@@ -27,13 +28,14 @@ const SignIn = () => {
             const userInfo = await signIn(email, password);
             // Handle redirection based on user role
             if (userInfo.role === "ADMIN") {
-                dispatch(userInfo);
+                dispatch(setUserInfo(userInfo));
                 router.replace('/admin/dashboard');
-            } else {
-                dispatch(userInfo);
+            } else if (userInfo.role === "USER") {
+                dispatch(setUserInfo(userInfo));
                 router.replace('/');
             }
         } catch (error: any) {
+            console.log(error);
             setError(error);
             setIsLoading(false);
         }
@@ -42,8 +44,8 @@ const SignIn = () => {
 
     return(
         <div className="min-h-screen flex justify-center items-center relative">
-            {loading && (<Loading />)}
             <div className="main-card xl:w-[20vw]">
+                {loading && (<Loading className="rounded-main" />)}
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign In</h2>
                 <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
                     <MainInput 
