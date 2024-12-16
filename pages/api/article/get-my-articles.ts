@@ -12,15 +12,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ error: "Invalid or missing user id parameter." });
 
         try {
-            // Retrieve article profile by email
+            // Retrieve articles
             const articles = await prisma.article.findMany({
-                where: { authorId: String(userId) }
+                where: { authorId: String(userId) },
+                select: {
+                    id: true,
+                    title: true,
+                    thumbnail: true,
+                    likes: true,
+                    comments: true,
+                    authorId: true,
+                    authorName: true,
+                    authorPic: true
+                }
             });
-
-            if (!articles) 
+            
+            if (!articles.length) 
                 return res.status(404).json({ error: "You have not any articles yet!" });
+            
+            // Format the result to include counts directly
+            const formattedArticles = articles.map(article => ({
+                id: article.id,
+                title: article.title,
+                thumbnail: article.thumbnail,
+                likesCount: article.likes.length,
+                commentsCount: article.comments.length,
+                authorId: article.authorId,
+                authorName: article.authorName,
+                authorPic: article.authorPic
+            }));
 
-            res.status(200).json({ articles });
+            res.status(200).json({ articles: formattedArticles });
         } catch (error) {
             console.error("Error happened while trying get your articles:", error);
             res.status(500).json({ error: "Internal server error." });

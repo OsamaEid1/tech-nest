@@ -22,6 +22,7 @@ export const useGetFollowingTopics = () => {
                 const user = await fetchUserProfile(userCardinalities.id);
                 dispatch(setUserInfo(user));
                 setFollowingTopics(user.followingTopicsNames);
+                setError(null);
             } catch (error) {
                 console.error(error);
                 setError("Can't get the following topics now, try again later!");
@@ -33,7 +34,6 @@ export const useGetFollowingTopics = () => {
             setLoading(false);
         }
     };
-    
     useEffect(() => {
         // If userInfo is stored in the redux store
         if (userInfo?.followingTopicsNames) { 

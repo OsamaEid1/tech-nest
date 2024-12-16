@@ -16,7 +16,7 @@ export const useGetUserProfile = () => {
     const dispatch = useAppDispatch();
 
     // Prepare userId because if the user info is not stored, fetch it
-    const { loading: userCardinalitiesLoading, userInfo: userCardinalities } = useGetUserInfo();
+    const {loading: userCardinalitiesLoading, userInfo: userCardinalities} = useGetUserInfo();
     const handleFetchUserProfile = async () => {
         if (userCardinalities) {
             try {

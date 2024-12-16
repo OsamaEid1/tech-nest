@@ -39,6 +39,7 @@ model Article {
   updatedAt  DateTime? @default(now())
   authorName String
   authorId   String    @db.ObjectId
+  authorPic  String
   user       User      @relation("UserArticles", fields: [authorId], references: [id])
 }
 

@@ -1,3 +1,5 @@
+import { ArticleCard } from "app/helpers/constants";
+
 export async function fetchRelatedArticles(topics = []) {
     try {
         // Construct the query string
@@ -6,14 +8,15 @@ export async function fetchRelatedArticles(topics = []) {
             method: "GET",
         });
 
-        if (!response.ok) 
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData.error;
+        }
 
         const data = await response.json();
-        
-        return data.articles;
+        return data.articles as ArticleCard[];
     } catch (error) {
-        console.error("Failed to fetch articles:", error);
+        console.error("Failed to fetch articles: ", error);
         throw error;
     }
 }

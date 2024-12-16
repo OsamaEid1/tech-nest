@@ -1,9 +1,10 @@
 export const fetchAllTopics = async () => {
     try {
         const response = await fetch(`/api/topics/get-all-topics`);
+        
         if (!response.ok){
             const errorData = await response.json();
-            throw new Error(`Error: ${errorData.error}`);
+            throw errorData.error;
         }
         
         const data = await response.json();

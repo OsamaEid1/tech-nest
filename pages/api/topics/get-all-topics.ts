@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Retrieve topics profile by email
             const topics = await prisma.topics.findMany();
 
-            if (!topics) {
+            if (!topics?.length) {
                 return res.status(404).json({ error: "No topics are stored!" });
             }
 

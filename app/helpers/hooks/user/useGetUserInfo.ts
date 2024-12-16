@@ -4,7 +4,7 @@ import getUserCardinalities, { DecodedToken } from 'app/helpers/auth/getUserCard
 
 function useGetUserInfo() {
     const [loading, setIsLoading] = useState(true);
-    const [userInfo, setUserInfo] = useState<DecodedToken | null>();
+    const [userInfo, setUserInfo] = useState<DecodedToken | null>(null);
 
     const handleGetUserCardinalities = async () => {
         try {

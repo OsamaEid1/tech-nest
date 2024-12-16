@@ -11,15 +11,14 @@ export async function updateArticleComments(articleId: string, updatedComments: 
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            console.error("Error updating likes:", error);
-            throw error;
+            const errorData = await response.json();
+            throw errorData.error;
         }
 
         const result = await response.json();
         return result.updatedArticle;
     } catch (error) {
-        console.error("An unexpected error occurred:", error);
+        console.error("An unexpected error occurred while updating comments: ", error);
         throw error;
     }
 }

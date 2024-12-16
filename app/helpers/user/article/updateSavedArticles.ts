@@ -10,14 +10,13 @@ async function updateSavedArticles(userId: string, savedArticlesIDs: string[]) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error("Failed to update saved articles:", errorData.error);
             throw errorData.error;
         }
 
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("Error updating saved articles:", error);
+        console.error("Error while updating saved articles: ", error);
         throw error;
     }
 }

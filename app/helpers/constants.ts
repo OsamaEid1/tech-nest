@@ -12,17 +12,28 @@ interface CommentData {
     createdAt: string
 }
 
-type UserInfo = {
-    id?: string;
-    name: string;
-    email: string;
-    password?: string;
-    pic: string;
-    followingTopicsNames: string[];
-    savedArticlesIDs: string[];
-    isActive?: Boolean;
-    role: String;
-    createdAt?: string;
+interface UserInfo {
+    id?: string,
+    name: string,
+    email: string,
+    password?: string,
+    pic: string,
+    followingTopicsNames: string[],
+    savedArticlesIDs: string[],
+    isActive?: Boolean,
+    role: String,
+    createdAt?: string
+}
+
+interface ArticleCard {
+    id: string,
+    title: string,
+    thumbnail: string,
+    likesCount: number,
+    commentsCount: number,
+    authorId?: string,
+    authorName?: string,
+    authorPic?: string
 }
 
 const INITIAL_USER_INFO : UserInfo = {
@@ -88,5 +99,6 @@ export type {
     LikeData,
     CommentData,
     UserInfo,
-    Topic
+    Topic,
+    ArticleCard
 }

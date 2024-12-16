@@ -7,13 +7,16 @@ export const updateFollowingTopics = async (id: string, followingTopics: string[
             },
             body: JSON.stringify({id, followingTopics}),
         });
-        const data = await response.json();
         
-        if (!response.ok) throw data.error;
-
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData.error;
+        }
+        
+        const data = await response.json();
         return data.updatedUser;
     } catch (error) {
-        console.error('Failed to update the following topics:', error);
+        console.error('Failed to update the following topics: ', error);
         throw error;
     }
 };

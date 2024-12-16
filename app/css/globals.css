@@ -83,13 +83,13 @@ a.active {
 }
 
 .slider::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.80);
+  background-color: rgba(151, 150, 150, 0.8);
   border-radius: 20px;
   border: 1px solid #00A9C3;
 }
 
 .slider::-webkit-scrollbar-thumb:hover {
-  background-color: black;
+  background-color: rgba(77, 76, 76, 0.8);
 }
 
 @keyframes spin {

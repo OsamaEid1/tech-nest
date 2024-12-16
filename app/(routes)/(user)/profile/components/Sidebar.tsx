@@ -2,62 +2,37 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 
-function ProfileSidebar() {
+function ProfileSidebar({ id, name, pic, followingTopics }) {
     return (
         <div className="text-center">
             <Image
-                src="/assets/images/my-pic.png"
+                src={pic || '/assets/images/profile.png'}
                 alt="User Image"
-                width={150}
-                height={150}
+                priority
+                width={180}
+                height={180}
                 className="rounded-full shadow shadow-hovers mx-auto"
             />
-            <h3 className="mt-5 mb-2">Osama Eid</h3>
+            <h3 className="mt-5 mb-2 capitalize">{name || 'User'}</h3>
             <Link
-                href="edit-profile"
+                href={`edit-profile/${id}`}
                 className="duration-300 underline hover:no-underline hover:text-hovers"
             >
-                Edit User Info
+                Edit Your Profile
             </Link>
 
             <div className="mt-3">
-                <h3>Following Topics:</h3>
+                <h3>The Following Topics:</h3>
                 <ul className="bg-light flex flex-wrap rounded-main p-2">
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
-                    <li
-                        className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
-                    >
-                        Topic 1
-                    </li>
+                    {followingTopics ? followingTopics.map(topic => (
+                        <li
+                            className="m-1 p-2 rounded-full whitespace-nowrap font-medium bg-white"
+                        >
+                            {topic}
+                        </li>
+                    )) : (
+                        <li className='text-left'>You don't follow any topics yet!</li>
+                    )}
                 </ul>
                 <Link 
                     href="/manage-following-topics"
