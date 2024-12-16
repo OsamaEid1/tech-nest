@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import PersonIcon from "@mui/icons-material/Person";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
@@ -6,22 +7,25 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import Link from "next/link";
-
+import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 
 export default function Sidebar({ items }) {
+  const { loading, error, userProfile: user } = useGetUserProfile();
   return (
     <div className=" border-t-2 border-[#F2F2F2]">
       <Image
-        src={'/assets/images/profile.png'}
+        src={user?.pic}
         alt="profile img"
         width={90}
         height={90}
         className="rounded-full mt-6 max-w-40 mx-auto"
       />
+
       <div className="flex gap-7 flex-col text-black mt-10 text-lg border-b-2 border-[#F2F2F2] pb-6">
-        <div className="flex gap-3 items-center">
+        <Link href={"/profile"} className="flex gap-3 items-center">
           <PersonIcon /> <p>Profile</p>
-        </div>
+        </Link>
+
         <div className="flex gap-3 items-center">
           <LibraryBooksIcon /> <p>Liberary</p>
         </div>
@@ -47,7 +51,12 @@ export default function Sidebar({ items }) {
             );
           })}
         </div>
-        <Link href="/manage-following-topics" className="text-green-400 cursor-pointer underline duration:300 hover:no-underline">See more topics</Link>
+        <Link
+          href="/manage-following-topics"
+          className="text-green-400 cursor-pointer underline duration:300 hover:no-underline"
+        >
+          See more topics
+        </Link>
       </div>
     </div>
   );
