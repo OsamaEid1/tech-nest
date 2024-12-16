@@ -4,6 +4,8 @@ import Slider from 'components/ui/Slider';
 import { fetchMyArticles } from 'app/helpers/user/article/fetchMyArticles';
 import { ArticleCard } from 'app/helpers/constants';
 import Loading from '@components/ui/Loading';
+import Link from 'next/link';
+import MiniArticleCard from './MiniArticleCard';
 
 
 function MainContent({ userId, savedArticlesIDs }) {
@@ -20,13 +22,12 @@ function MainContent({ userId, savedArticlesIDs }) {
                 const articles = await fetchMyArticles(userId);
                 setMyArticles(articles);
             } catch (error: any) {
-                console.error(error);
                 setMyArticlesErr(error)
             }
         }
     };
     // fetch saved articles (title, pic, id)
-console.log("SSS ", myArticlesLoading, myArticles);
+
     useEffect(() => {
         if (userId) handleGetMyArticles();
     }, [userId, savedArticlesIDs]);
@@ -35,18 +36,23 @@ console.log("SSS ", myArticlesLoading, myArticles);
         <>
             {/* Start Articles */}
             <div className="relative">
-                <h2 className="text-3xl font-mono mb-3">Articles</h2>
+                <h2 className="text-3xl font-mono mb-3">My Articles</h2>
                 <Slider>
                     {myArticlesLoading && <Loading />}
                     {(!myArticlesLoading && myArticles) ? myArticles.map((article, indx) => (
-                        <div
+                        <MiniArticleCard 
                             key={indx}
-                            className="min-w-[200px] px-20 py-14 border bg-slate-200 rounded-main flex-shrink-0"
-                        >
-                            55
-                        </div>
+                            id={article.id}
+                            title={article.title}
+                            thumbnail={article.thumbnail}
+                            likesCount={article.likesCount}
+                            commentsCount={article.commentsCount}
+                        />
                     ))
-                    : <div className='min-w-[200px] w-full px-20 py-14 border bg-slate-200 rounded-main flex-shrink-0'>{myArticlesErr}</div>}
+                    : <div className='min-w-[200px] text-center px-20 py-14 border bg-slate-200 rounded-main flex-1'>
+                        {myArticlesErr}
+                        <Link href="/write-article" className='ms-1 text-green-600 font-semibold underline duration-300 hover:no-underline'>Publish now?</Link>
+                    </div>}
                 </Slider>
             </div>
             {/* End Articles */}

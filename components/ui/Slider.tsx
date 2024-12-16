@@ -51,7 +51,7 @@ function Slider({ className, children }: Props) {
         )}
         {/* Content Slider */}
         <div
-            className={`flex gap-5 bg-gray-300 p-4 overflow-x-auto scroll-smooth slider ${className}`}
+            className={`flex gap-5 bg-gray-300 w-full p-4 overflow-x-auto scroll-smooth rounded-main slider ${className}`}
             ref={sliderRef}
         >
             {children}

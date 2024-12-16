@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
             
             if (!articles.length) 
-                return res.status(404).json({ error: "You have not any articles yet!" });
+                return res.status(404).json({ error: "You have not published any article yet!" });
             
             // Format the result to include counts directly
             const formattedArticles = articles.map(article => ({
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             res.status(200).json({ articles: formattedArticles });
         } catch (error) {
-            console.error("Error happened while trying get your articles:", error);
+            console.error("Error happened while trying get user's articles:", error);
             res.status(500).json({ error: "Internal server error." });
         }
     } else {
