@@ -1,6 +1,6 @@
 import { ArticleCard } from "app/helpers/constants";
 
-export async function fetchRelatedArticles(topics = []) {
+export async function fetchRelatedArticles(topics:String[]) {
     try {
         // Construct the query string
         const query = topics.length > 0 ? `?topics=${topics.join(",")}` : "";

@@ -9,20 +9,20 @@ import Link from "next/link";
 
 interface CardProps {
   title: string;
-  text: string;
+  // text: string;
   author: string;
-  date: string;
+  // date: string;
   views: number;
   comments: number;
   imageUrl: string;
-  id: number;
+  id: string;
 }
 
 const CustomCard: React.FC<CardProps> = ({
   title,
-  text,
+  // text,
   author,
-  date,
+  // date,
   views,
   comments,
   imageUrl,
@@ -51,7 +51,7 @@ const CustomCard: React.FC<CardProps> = ({
 
         <div className="flex items-center text-gray-400 mt-2 space-x-4">
           <div className="flex items-center">
-            <span className="ml-1">{date}</span>
+            {/* <span className="ml-1">{date}</span> */}
           </div>
           <div className="flex items-center">
             <VisibilityIcon fontSize="small" />

@@ -1,14 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Tabs, Tab } from "@mui/material";
-
+import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
+import { Topic } from "app/helpers/constants";
 interface CarouselProps {
   items: string[];
 }
 
-const Tags: React.FC<CarouselProps> = ({ items }) => {
+const Tags: React.FC<CarouselProps> = () => {
   const [value, setValue] = useState<number>(0);
-
+  const [items, setItems] = useState<Topic[]>([]);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -17,9 +18,14 @@ const Tags: React.FC<CarouselProps> = ({ items }) => {
     // Logic for adding a new tab or triggering an action
     alert("Add new tab action!");
   };
-
+  useEffect(()=>{
+    fetchAllTopics().then((data)=>{
+      setItems(data)
+    })
+  },[])
+  console.log(items)
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 ">
       {/* Tabs for carousel */}
       <Tabs
         value={value}
@@ -35,24 +41,21 @@ const Tags: React.FC<CarouselProps> = ({ items }) => {
         }}
         className="flex-1"
       >
-        {/* First tab as + button */}
-        <Tab
-          icon={<span className="text-black text-lg ">+</span>}
-          onClick={handleAddClick} // Trigger adding logic
-          className="capitalize text-sm text-black px-0"
-        />
-
+       
         {/* Regular tabs */}
         {items.map((item, index) => (
           <Tab
-            key={index}
-            label={item}
+            key={item.id}
+            label={item.name}
             className={`capitalize text-sm ${
               value === index + 1 ? 'text-black font-semibold' : 'text-gray-500'
             }`}
           />
+          
         ))}
       </Tabs>
+      
+
     </div>
   );
 };
