@@ -29,11 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         id: true,
                         title: true,
                         thumbnail: true,
+                        topics: true,
                         likes: true,
                         comments: true,
                         authorId: true,
                         authorName: true,
-                        authorPic: true
+                        authorPic: true,
+                        createdAt: true
                     }
                 });
 
@@ -46,11 +48,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         id: true,
                         title: true,
                         thumbnail: true,
+                        topics: true,
                         likes: true,
                         comments: true,
                         authorId: true,
                         authorName: true,
-                        authorPic: true
+                        authorPic: true,
+                        createdAt: true
                     }
                 });
 
@@ -59,15 +63,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             // Format the result to include counts directly
-            const formattedArticles = articles.map(article => ({
+            const formattedArticles = articles.map((article) => ({
                 id: article.id,
                 title: article.title,
                 thumbnail: article.thumbnail,
+                topics: article.topics,
                 likesCount: article.likes.length,
                 commentsCount: article.comments.length,
                 authorId: article.authorId,
                 authorName: article.authorName,
-                authorPic: article.authorPic
+                authorPic: article.authorPic,
+                createdAt: article.createdAt,
             }));
 
             res.status(200).json({ articles: formattedArticles });

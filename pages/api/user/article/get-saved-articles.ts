@@ -34,7 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     title: true,
                     thumbnail: true,
                     likes: true,
-                    comments: true
+                    comments: true,
+                    createdAt: true
                 },
             });
 
@@ -49,7 +50,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 title: article.title,
                 thumbnail: article.thumbnail,
                 likesCount: article.likes.length,
-                commentsCount: article.comments.length
+                commentsCount: article.comments.length,
+                createdAt: article.createdAt,
             }));
 
             res.status(200).json({ articles: formattedArticles });

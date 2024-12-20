@@ -34,7 +34,9 @@ interface ArticleCard {
     commentsCount: number,
     authorId?: string,
     authorName?: string,
-    authorPic?: string
+    authorPic?: string,
+    createdAt: string,
+    topics: string[]
 }
 
 const INITIAL_USER_INFO : UserInfo = {
