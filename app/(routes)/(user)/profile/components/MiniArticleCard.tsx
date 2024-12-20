@@ -9,17 +9,18 @@ function MiniArticleCard({
    id,
    title,
    thumbnail,
+   status,
    likesCount,
    commentsCount,
 }: ArticleCard) {
    return (
-      <div className="rounded-main shadow-lg">
+      <div className={`rounded-main shadow-lg ${status === 'pending' ? 'outline-1 outline-yellow-200' : 'outline-1 outline-green-200'}`}>
          <Link
             href={`articles/${id}`}
             className="
-                                    block min-w-[250px] min-h-[180px] bg-slate-200 rounded-main flex-shrink-0
-                                    relative duration-300 group/card
-                            "
+                     block min-w-[250px] min-h-[180px] bg-slate-200 rounded-main flex-shrink-0
+                     relative duration-300 group/card
+               "
          >
             {/* Thumbnail */}
             <Image
@@ -35,31 +36,35 @@ function MiniArticleCard({
                <p
                   title={title}
                   className="
-                                        text-white font-medium underline duration-300 py-1 truncate
-                                        group-hover/card:no-underline group-hover/card:text-hovers leading-tight"
+                     text-white font-medium underline duration-300 py-1 truncate
+                     group-hover/card:no-underline group-hover/card:text-hovers leading-tight
+                  "
                >
                   {title}
                </p>
                {/* Likes & Comments Counts */}
-               <ul className="flex gap-2 text-white py-1 mt-auto">
-                  <li>
-                     <FontAwesomeIcon
-                        icon={faHeart}
-                        size="sm"
-                        className="text-red-500 "
-                     />
-                     <span> {likesCount}</span>
-                  </li>
-                  <li>
-                     <FontAwesomeIcon
-                        icon={faComment}
-                        size="sm"
-                        flip="horizontal"
-                        className=""
-                     />
-                     <span> {commentsCount}</span>
-                  </li>
-               </ul>
+               {status !== 'approved' ? (<p>Status:<span className="font-medium"> {status}</span></p>)
+               : (
+                  <ul className="flex gap-2 text-white py-1 mt-auto">
+                     <li>
+                        <FontAwesomeIcon
+                           icon={faHeart}
+                           size="sm"
+                           className="text-red-500 "
+                        />
+                        <span> {likesCount}</span>
+                     </li>
+                     <li>
+                        <FontAwesomeIcon
+                           icon={faComment}
+                           size="sm"
+                           flip="horizontal"
+                           className=""
+                        />
+                        <span> {commentsCount}</span>
+                     </li>
+                  </ul>
+               )}
             </div>
          </Link>
       </div>

@@ -11,11 +11,11 @@ type SigningUpUserInfo = {
 export const userSlice = createSlice({
     name: "user",
     initialState: {
+        userInfo: {} as UserInfo,
         userInfoForm: {} as SigningUpUserInfo,
-        userInfo: {} as UserInfo
     },
     reducers: {
-        addToUserInfo(state, action) {
+        addToUserInfoForm(state, action) {
             const updatedUserInfo = action.payload;
             state.userInfoForm = { ...state.userInfoForm, ...updatedUserInfo };
         },
@@ -26,4 +26,4 @@ export const userSlice = createSlice({
     }
 });
 
-export const { addToUserInfo, setUserInfo } = userSlice.actions;
+export const { addToUserInfoForm, setUserInfo } = userSlice.actions;

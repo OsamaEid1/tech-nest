@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Verify the password
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                return res.status(401).json({ error: 'الإيميل أو الباسورد خطأ، أعد المحاولة' });
+                return res.status(401).json({ error: 'Email/Password is wrong, try again!' });
             }
 
             // Create JWT token
@@ -56,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(200).json({ user: userWithoutPassword });
         } catch (error) {
             console.error("Something happened while fetching user info! ", error)
-            return res.status(500).json({ error: 'حدث خطأ أثناء محاولة تسجيل الدخول، حاول ثانيةً!' });
+            return res.status(500).json({ error: 'There is an error occurred, try again later!' });
         }
     } else {
         res.setHeader('Allow', ['POST']);

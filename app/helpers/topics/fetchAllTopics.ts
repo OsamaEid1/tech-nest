@@ -10,6 +10,9 @@ export const fetchAllTopics = async () => {
         const data = await response.json();
         return data.topics;
     } catch (error) {
+        if (typeof error !== "string")
+            throw "There is an error occurred, Please try again later!";
+        
         console.error("Failed to fetch all topics: ", error);
         throw error;
     }

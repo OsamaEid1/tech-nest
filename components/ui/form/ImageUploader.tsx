@@ -2,14 +2,17 @@
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRetweet, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch, useAppSelector } from "state/hooks"
-import { addToUserInfo } from "state/slices/userSlice";
 
-const ImageUploader = ({ setPicFile }) => {
+const ImageUploader = ({ setPicFile, storedPic='' }) => {
     const [selectedImageAsBase64, setSelectedImageAsBase64] = useState<string | null>(null);
     const [selectedImageAsFile, setSelectedImageAsFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null); 
     const fileInputRef = useRef<HTMLInputElement | null>(null); 
+
+    // Get stored image for edit-profile route
+    useEffect(() => {
+        if (storedPic !== '') setSelectedImageAsBase64(storedPic);
+    }, [storedPic])
 
     // File validation logic
     const validateFile = (file: File) => {
@@ -102,21 +105,23 @@ const ImageUploader = ({ setPicFile }) => {
                         <li 
                             title="Click to change the pic"
                             className="
-                            text-xl font-bold inline bg-light me-3 py-[1px] px-2 
+                            text-xl font-bold inline bg-light py-[1px] px-2 
                                 rounded-main duration-300 hover:bg-hovers hover:text-white cursor-pointer
                             "
                             onClick={handleClickOnFileButton}
                         >
                             <FontAwesomeIcon icon={faRetweet} size="sm" />
                         </li>
-                        <li
+                        {/* <li
                             title="Click to remove the pic"
                             className="
                                 inline bg-light py-[3px] px-2 rounded-main duration-300
                                 hover:bg-red-500 hover:text-white cursor-pointer
                             "
                             onClick={() => setSelectedImageAsBase64(null)}
-                        ><FontAwesomeIcon icon={faTrash} size='sm' /></li>
+                        >
+                            <FontAwesomeIcon icon={faTrash} size='sm' />
+                        </li> */}
                     </ul>
                 </div>
             )}

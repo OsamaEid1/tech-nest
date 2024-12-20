@@ -11,7 +11,6 @@ type PopupProps = {
 };
 
 function Popup({ type, text, options, onConfirm, onToggle, className, children } : PopupProps) {
-
     // Set Styles based on the type of the Popup
     let styles = "bg-gray-500"
     let buttonYesStyles = ""
@@ -52,16 +51,27 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
                             <h3 className="mb-5 text-lg font-normal ">
                                 {text}
                             </h3>
+                            {!options && (
+                                <button type="button" 
+                                    className={`
+                                        bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300
+                                        hover:bg-slate-200
+                                    `}
+                                    onClick={onToggle}
+                                    >
+                                    OK
+                                </button>
+                            )}
                             {
                                 type != "success" && options && (<>
                                     <button type="button" 
                                         className={`
-                                            bg-mainBlue duration main py-2.5 px-5 rounded-main duration-300
-                                            hover:bg-mainBlue/80 ${buttonYesStyles}
+                                            py-2.5 px-5 rounded-main duration-300
+                                            ${buttonYesStyles}
                                         `}
                                         onClick={onConfirm}
                                         >
-                                        نعم
+                                        Yes
                                     </button>
                                     <button type="button"
                                         className={`
@@ -70,7 +80,7 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
                                                 rounded-main ${buttonNoStyles}
                                             `}
                                         onClick={onToggle}
-                                        >لا
+                                        >No
                                     </button>
                                 </>)
                             }

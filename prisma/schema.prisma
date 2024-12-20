@@ -18,7 +18,7 @@ model User {
   name                 String
   email                String    @unique
   password             String
-  pic                  String
+  pic                  String?
   followingTopicsNames String[]
   savedArticlesIDs     String[]
   isActive             Boolean
@@ -37,6 +37,7 @@ model Article {
   comments   Json[]
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @default(now())
+  status     ArticleStatus
   authorName String
   authorId   String    @db.ObjectId
   authorPic  String
@@ -52,4 +53,9 @@ model Topics {
 enum Role {
   ADMIN
   USER
+}
+enum ArticleStatus {
+  pending
+  approved
+  refused
 }

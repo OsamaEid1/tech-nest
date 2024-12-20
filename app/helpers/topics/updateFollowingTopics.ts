@@ -16,6 +16,9 @@ export const updateFollowingTopics = async (id: string, followingTopics: string[
         const data = await response.json();
         return data.updatedUser;
     } catch (error) {
+        if (typeof error !== "string")
+            throw "There is an error occurred, Please try again later!";
+        
         console.error('Failed to update the following topics: ', error);
         throw error;
     }

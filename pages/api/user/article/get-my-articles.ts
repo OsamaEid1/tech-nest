@@ -19,27 +19,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     id: true,
                     title: true,
                     thumbnail: true,
+                    status: true,
                     likes: true,
-                    comments: true,
-                    authorId: true,
-                    authorName: true,
-                    authorPic: true
+                    comments: true
                 }
             });
             
             if (!articles.length) 
-                return res.status(404).json({ error: "You have not published any article yet!" });
+                return res.status(404).json({ error: "You have't published any article yet!" });
             
             // Format the result to include counts directly
             const formattedArticles = articles.map(article => ({
                 id: article.id,
                 title: article.title,
                 thumbnail: article.thumbnail,
+                status: article.status,
                 likesCount: article.likes.length,
-                commentsCount: article.comments.length,
-                authorId: article.authorId,
-                authorName: article.authorName,
-                authorPic: article.authorPic
+                commentsCount: article.comments.length
             }));
 
             res.status(200).json({ articles: formattedArticles });

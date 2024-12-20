@@ -29,6 +29,7 @@ interface ArticleCard {
     id: string,
     title: string,
     thumbnail: string,
+    status: 'pending' | 'approved' | 'refused',
     likesCount: number,
     commentsCount: number,
     authorId?: string,

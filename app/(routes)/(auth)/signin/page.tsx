@@ -29,7 +29,7 @@ const SignIn = () => {
             // Handle redirection based on user role
             if (userInfo.role === "ADMIN") {
                 dispatch(setUserInfo(userInfo));
-                router.replace('/admin/dashboard');
+                router.replace('/admin/manage-articles');
             } else if (userInfo.role === "USER") {
                 dispatch(setUserInfo(userInfo));
                 router.replace('/');

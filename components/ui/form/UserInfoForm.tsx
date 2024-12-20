@@ -5,7 +5,7 @@ import ImageUploader from "components/ui/form/ImageUploader";
 import MainButton from "components/ui/form/MainButton";
 import { UserInfo } from "app/helpers/constants";
 import { useAppDispatch, useAppSelector } from "state/hooks";
-import { addToUserInfo } from "state/slices/userSlice";
+import { addToUserInfoForm } from "state/slices/userSlice";
 
 type Props = {
     userInfo: UserInfo;
@@ -19,16 +19,17 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
     const dispatch = useAppDispatch();
     const updatedUserInfo = useAppSelector(state => state.user.userInfoForm);
 
+
     return (
         <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
-            <ImageUploader setPicFile={setPicFile} />
+            <ImageUploader storedPic={userInfo.pic} setPicFile={setPicFile} />
             <MainInput 
                 id="name"
                 type="name" 
                 placeholder="Name" 
                 inputStyles="mb-4 w-[350px] max-w-full"
-                value={userInfo?.name || updatedUserInfo.name}
-                onChange={(e) => dispatch(addToUserInfo({name: e.target.value}))}
+                value={updatedUserInfo.name || userInfo?.name}
+                onChange={(e) => dispatch(addToUserInfoForm({name: e.target.value}))}
                 required={true}
             />
             <MainInput 
@@ -36,37 +37,34 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
                 type="email" 
                 placeholder="Email" 
                 inputStyles="mb-4"
-                value={userInfo?.email || updatedUserInfo.email}
-                onChange={(e) => dispatch(addToUserInfo({email: e.target.value}))}
+                value={updatedUserInfo.email || userInfo?.email}
+                onChange={(e) => dispatch(addToUserInfoForm({email: e.target.value}))}
                 required={true}
             />
             <MainInput 
                 id="pass"
                 type="password" 
                 placeholder="Password"
-                value={userInfo?.password || updatedUserInfo.password}
-                onChange={(e) => dispatch(addToUserInfo({password: e.target.value}))}
+                value={updatedUserInfo.password || userInfo?.password}
+                onChange={(e) => dispatch(addToUserInfoForm({password: e.target.value}))}
                 inputStyles="mb-4"
-                required={true}
+                required={(userInfo.password && userInfo.password !== '') ? true : false}
                 />
             <MainInput 
                 id="re-pass"
                 type="password" 
                 placeholder="Confirm Password"
                 value={updatedUserInfo.rePassword}
-                onChange={(e) => dispatch(addToUserInfo({rePassword: e.target.value}))}
+                onChange={(e) => dispatch(addToUserInfoForm({rePassword: e.target.value}))}
                 inputStyles="mb-4"
-                required={true}
+                required={(userInfo.password && userInfo.password !== '') ? true : false}
             />
             <MainButton
                 type="submit"
-                className="
-                            w-fit mx-auto mt-5
-                            font-semibold py-1 px-2
-                        "
-                        disabled={loading}
-                    >
-                        {submitButtonText}
+                className="w-fit mx-auto mt-5font-semibold py-1 px-2"
+                disabled={loading}
+            >
+                {submitButtonText}
             </MainButton>
         </form>
     )

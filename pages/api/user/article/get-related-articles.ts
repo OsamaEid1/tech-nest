@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         topics: {
                             hasSome: topicsArray,
                         },
+                        status: 'approved'
                     },
                     select: {
                         id: true,

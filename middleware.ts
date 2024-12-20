@@ -9,35 +9,54 @@ const SECRET_KEY = encoder.encode(process.env.SECRET_KEY || 'e87ae886e49904ac30d
 export async function middleware(req: NextRequest) {
     const tokenCookie = req.cookies.get('token');
     
+    const { pathname } = req.nextUrl;
     // If no token is found, redirect to login page
-    if (!tokenCookie) 
-        return NextResponse.redirect(new URL('/signin', req.url));
+    if (!tokenCookie) {
+        if (pathname.startsWith("/signin") || pathname.startsWith('/signup')) {
+            return;
+        } else {
+            return NextResponse.redirect(new URL('/signin', req.url));
+        }
+    }
     
     // Extract the token string from the RequestCookie object
     const token = tokenCookie.value;
-    const { pathname } = req.nextUrl;
-    
-    try {
-        // Verify the JWT token 
-        const userCardinalities = await getUserCardinalities(token, SECRET_KEY);
-        if (!userCardinalities) 
-            throw new Error("Failed to verify token");
-        
-        // Check User Access Permission
-        if (pathname.startsWith('/admin') && userCardinalities.role !== 'admin') 
-            throw new Error(`path name: ${pathname.split("")[0]} WITH role: ${userCardinalities.role}`)
 
-        // Proceed with the request if the token and role are valid
-        return NextResponse.next();
-    } catch (error) {
-        console.error("Error, while trying to access unauthorized pages, ", error);
-        // If token verification fails OR trying to access unauzarized page, redirect to login page
+    // Verify the JWT token 
+    const userCardinalities = await getUserCardinalities(token, SECRET_KEY);
+    if (!userCardinalities) {
+        console.error("Failed to verify token");
         return NextResponse.redirect(new URL('/signin', req.url));
     }
+    
+    // User Role
+    const userRole = userCardinalities.role.toLowerCase();
+
+    // Prevent Access Sign in & Sign Up Pages When Token is Found
+    if (userCardinalities && (pathname.startsWith('/signin') || pathname.startsWith('/signup'))) {
+        console.error("Trying to access signIn/SignUp routes while he is already signing !");
+        if (userRole === 'admin')
+            return NextResponse.redirect(new URL('/admin/manage-articles', req.url));
+        else if (userRole === 'user')
+            return NextResponse.redirect(new URL('/', req.url));
+    }
+    
+    // Check User Access Permission
+    if (pathname.startsWith('/admin') && userRole !== 'admin') {
+        console.error("Error, while trying to access unauthorized pages, ", `path name: ${pathname.split("")[0]} WITH role: user`);
+        return NextResponse.redirect(new URL('/', req.url));
+    } else if (userRole === 'admin' && !pathname.startsWith('/admin')) {
+        // Check Admin Access Permission
+        console.error("Error, while trying to access unauthorized pages, ", `path name: ${pathname.split("")[0]} WITH role: admin`);
+        return NextResponse.redirect(new URL('/admin/manage-articles', req.url));
+    }
+
+    // Proceed with the request if the token and role are valid
+    return NextResponse.next();
 }
 
 export const config = {
     matcher: [
-        '/((?!_next/.*|signin|signup|api|favicon.ico|sitemap.xml|robots.txt).*)', /*** Exclude _next (static files ex: images & css files) and api (any api route) signin/signup pages */
+        '/((?!_next/.*|api|favicon.ico|sitemap.xml|robots.txt).*)', /*** Exclude _next (static files ex: images & css files) and api (any api route) signin/signup pages */
     ],
 };

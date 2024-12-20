@@ -60,8 +60,12 @@ input {
 }
 
 a.active {
-  background-color: #2F2F3D;
-  color: #7ba1fb
+  background-color: #00A9C3;
+  color: white
+}
+
+a:active {
+  outline: none;
 }
 
 .main-card {
@@ -69,8 +73,12 @@ a.active {
                     pb-3 pt-2 px-6 rounded-main text-black relative;
 }
 
+.main-card .err-msg {
+  align-self: self-start;
+}
+
 .err-msg {
-  @apply text-red-500 text-base text-right block mt-2;
+  @apply text-red-500 text-base block mt-2 text-left;
 }
 
 .slider::-webkit-scrollbar {
@@ -99,4 +107,21 @@ a.active {
 }
 .animate-spin-fast {
     animation: spin 0.5s linear infinite;
+}
+
+/* Quill Editor */
+.quill {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+.ql-toolbar {
+  border-top-right-radius: 0.75rem;
+  border-top-left-radius: 0.75rem;
+  border-bottom: 1px solid #eee !important;
+}
+.ql-container.ql-snow {
+  border: 0;
+  border-bottom-right-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
 }

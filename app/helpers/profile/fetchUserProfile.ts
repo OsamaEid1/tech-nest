@@ -10,6 +10,9 @@ export const fetchUserProfile = async (id: string) => {
         const data = await response.json();
         return data.user;
     } catch (error) {
+        if (typeof error !== "string")
+            throw "There is an error occurred, Please try again later!";
+        
         console.error("Failed to fetch user profile: ", error);
         throw error;
     }

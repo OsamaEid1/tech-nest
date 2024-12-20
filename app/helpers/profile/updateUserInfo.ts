@@ -13,6 +13,9 @@ export const updateUserInfo = async (formData: FormData) => {
         const data = await response.json();
         return data.user;
     } catch (error) {
+        if (typeof error !== "string")
+            throw "There is an error occurred, Please try again later!";
+        
         console.error("Error updating user profile: ", error);
         throw error;
     }

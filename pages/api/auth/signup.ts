@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             try {
-                // Check if the user already exists
+                // Check if the email already exists
                 const existingUser = await prisma.user.findUnique({
                     where: { email: email[0] },
                 });
