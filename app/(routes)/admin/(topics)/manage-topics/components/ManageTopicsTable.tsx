@@ -25,7 +25,7 @@ function ManageTopicsTable({ topics }: Props) {
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
     const [popupType, setPopupType] = useState<'delete' | 'success'>('delete');
     const [popupText, setPopupText] = useState<string>('');
-
+    // Logical States
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -99,7 +99,7 @@ function ManageTopicsTable({ topics }: Props) {
             )}
             <div className="relative overflow-x-auto my-10 rounded-main text-center shadow-lg">
                 <table className="w-full text-base">
-                    <thead className="uppercase bg-white text-base">
+                    <thead className="uppercase text-base">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Name

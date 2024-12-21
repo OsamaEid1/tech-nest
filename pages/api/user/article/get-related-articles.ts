@@ -44,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } else {
                 // Fetch all articles if no topics are provided
                 articles = await prisma.article.findMany({
+                    where: {status: 'approved'},
                     select: {
                         id: true,
                         title: true,

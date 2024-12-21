@@ -14,16 +14,13 @@ const Tags: React.FC<CarouselProps> = () => {
     setValue(newValue);
   };
 
-  const handleAddClick = () => {
-    // Logic for adding a new tab or triggering an action
-    alert("Add new tab action!");
-  };
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllTopics().then((data)=>{
       setItems(data)
-    })
+    });
   },[])
-  console.log(items)
+
+  
   return (
     <div className="flex items-center space-x-2 ">
       {/* Tabs for carousel */}
@@ -41,7 +38,7 @@ const Tags: React.FC<CarouselProps> = () => {
         }}
         className="flex-1"
       >
-       
+      
         {/* Regular tabs */}
         {items.map((item, index) => (
           <Tab

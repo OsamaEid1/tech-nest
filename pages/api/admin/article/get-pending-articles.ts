@@ -13,6 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 select: {
                     id: true,
                     title: true,
+                    thumbnail: true,
+                    content: true,
                     authorName: true,
                     createdAt: true,
                 },

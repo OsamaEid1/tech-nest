@@ -5,7 +5,7 @@ function Loading({ className="" }) {
         <div role="status"
             className={`
                 absolute z-[999] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2
-                w-full h-full flex justify-center items-center bg-black/70 ${className}
+                w-full h-full flex justify-center items-center bg-black/60 ${className}
             `}
         >
             <svg aria-hidden="true"

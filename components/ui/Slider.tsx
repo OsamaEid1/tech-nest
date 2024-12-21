@@ -39,7 +39,7 @@ function Slider({ className, children }: Props) {
     };
 
     return (
-        <div className="relative flex items-center group shadow-[-3px_8px_22px_10px_#e3dede] rounded-main">
+        <div className="relative flex items-center group shadow-[0px_0px_3px_1px_#00A9C3] rounded-main">
         {/* Left Scroll Button */}
         {isOverflow && (
             <button
@@ -51,7 +51,7 @@ function Slider({ className, children }: Props) {
         )}
         {/* Content Slider */}
         <div
-            className={`flex gap-5 bg-gray-300 w-full p-4 overflow-x-auto scroll-smooth rounded-main slider ${className}`}
+            className={`flex gap-5 bg-white w-full p-4 overflow-x-auto scroll-smooth rounded-main slider ${className}`}
             ref={sliderRef}
         >
             {children}

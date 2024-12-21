@@ -27,15 +27,16 @@ export default async function handler(
 
         form.parse(req, async (err, fields, files) => {
             if (err) {
+                console.error("Error while parsing the form data",err)
                 return res
                     .status(500)
-                    .json({ error: "Error parsing the form data." });
+                    .json({ error: "There is an invalid data !" });
             }
 
             const { id, email, name, password, isActive } = fields;
             const picFile = Array.isArray(files.picFile) ? files.picFile[0] : files.picFile;
 
-            if (!id) return res.status(400).json({error: 'There is an info for this user!'})
+            if (!id) return res.status(400).json({error: 'There is an invalid data!'})
 
             try {
                 let newPicPath = ''; // To store the new picture path

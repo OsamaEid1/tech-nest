@@ -11,7 +11,7 @@ export default function Home() {
       <Header />
       <main className="min-h-[calc(100vh-100px)] mt-[63px]">
         <div className="grid grid-cols-3">
-          <div className="sm:col-span-2 col-span-3 pr-6 border-r-2 border-t-2 border-[#F2F2F2]">
+          <div className="sm:col-span-2 col-span-3 px-6 border-r-2 border-t-2 border-[#F2F2F2]">
             <div className="border-b-2 border-gray-200">
               <Tags items={TAGS} />
             </div>

@@ -57,6 +57,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-        '/((?!_next/.*|api|favicon.ico|sitemap.xml|robots.txt).*)', /*** Exclude _next (static files ex: images & css files) and api (any api route) signin/signup pages */
+        '/((?!_next/.*|article|api|assets|uploads|favicon.ico|sitemap.xml|robots.txt).*)', /*** Exclude _next (static files ex: images & css files) and api (any api route) signin/signup pages */
     ],
 };

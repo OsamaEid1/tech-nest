@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     title: true,
                     thumbnail: true,
                     status: true,
+                    refusingReason: true,
                     likes: true,
                     comments: true,
                     createdAt: true
@@ -35,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 title: article.title,
                 thumbnail: article.thumbnail,
                 status: article.status,
+                refusingReason: article.refusingReason,
                 likesCount: article.likes.length,
                 commentsCount: article.comments.length,
                 createdAt: article.createdAt
