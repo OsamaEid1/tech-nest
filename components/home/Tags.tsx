@@ -46,13 +46,10 @@ const Tags = () => {
       >
         {/* Static Tabs */}
         <Tab
-          icon={<span className="text-gray-500 text-sm">All</span>}
+          icon={<span className="text-gray-500 text-sm">For you</span>}
           className="capitalize text-sm text-gray-500 px-0"
         />
-        <Tab
-          icon={<span className="text-gray-500 text-sm">Following</span>}
-          className="capitalize text-sm text-gray-500 px-0"
-        />
+        
         {/* Dynamic Tabs */}
         {items.map((item, index) => (
           <Link

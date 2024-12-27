@@ -25,17 +25,17 @@ export default function Sidebar() {
       />
 
       <div className="flex gap-7 flex-col text-black mt-10 text-lg border-b-2 border-[#F2F2F2] pb-6">
-        <Link href={"/profile"} className="flex gap-3 items-center">
+        <Link href={"/profile"} className="flex gap-3 items-center hover:font-semibold hover:underline">
           <PersonIcon /> <p>Profile</p>
         </Link>
-        <Link href={"/profile#my-articles"} className="flex gap-3 items-center">
+        <Link href={"/profile#my-articles"} className="flex gap-3 items-center hover:font-semibold hover:underline">
           <div className="flex gap-3 items-center">
             <LibraryBooksIcon /> <p>My Articles</p>
           </div>
         </Link>
         <Link
           href={"/manage-following-topics"}
-          className="flex gap-3 items-center"
+          className="flex gap-3 items-center hover:font-semibold hover:underline"
         >
           <div className="flex gap-3 items-center">
             <TurnedInNotIcon /> <p>Saved Articles</p>
