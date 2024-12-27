@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "@mui/material";
 import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
 import { Topic } from "app/helpers/constants";
-interface CarouselProps {
-  items: string[];
-}
 
-const Tags: React.FC<CarouselProps> = () => {
+
+const Tags = () => {
   const [value, setValue] = useState<number>(0);
   const [items, setItems] = useState<Topic[]>([]);
+
+  
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -23,7 +23,7 @@ const Tags: React.FC<CarouselProps> = () => {
       setItems(data);
     });
   }, []);
-  console.log(items);
+
   return (
     <div className="flex items-center space-x-2 ">
       {/* Tabs for carousel */}
