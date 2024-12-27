@@ -1,18 +1,25 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import Home from '../page'
+import { useEffect } from 'react';
 
 function TopicArticles({params}) {
-    const location = usePathname();
+    const pathname = usePathname();
 
-    console.log("sss ",location);
+    useEffect(() => {
+        const topic = pathname?.replaceAll("-", ' ');
+
+        try {
+            
+        } catch (error) {
+            
+        }
+    }, [])
 
     return (
-        <>
-            <Home>
-                <div>TopicArticles</div>
-            </Home>
-        </>
+        <Home>
+            <div>TopicArticles</div>
+        </Home>
     )
 }
 

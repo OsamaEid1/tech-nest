@@ -15,7 +15,8 @@ export default function Home({children}) {
             <div className="border-b-2 border-gray-200">
               <Tags />
             </div>
-            {children}
+
+            {children ? (children) : (<MainCard />)}
           </div>
           <div className="sm:col-span-1 px-6">
             <Sidebar />
