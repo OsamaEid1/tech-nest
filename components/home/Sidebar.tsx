@@ -12,8 +12,8 @@ import { useAppDispatch, useAppSelector } from "state/hooks";
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const userProfile = useAppSelector(state => state.user.userInfo);
-  
+  const userProfile = useAppSelector((state) => state.user.userInfo);
+
   return (
     <div className=" border-t-2 border-[#F2F2F2]">
       <Image
@@ -48,14 +48,20 @@ export default function Sidebar() {
               You're not follow any topics yet!
             </span>
           )}
-          {userProfile?.followingTopicsNames?.map((item) => {
+          {userProfile?.followingTopicsNames?.map((item, index) => {
             return (
-              <button
-                key={item}
-                className="text-black bg-gray-300 px-3 py-1 rounded-2xl"
+              <Link
+                key={index}
+                href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
+                // className="text-black bg-gray-300 px-3 py-1 rounded-2xl"
               >
-                {item}
-              </button>
+                <button
+                  key={item}
+                  className="text-black bg-gray-300 px-3 py-1 rounded-2xl"
+                >
+                  {item}
+                </button>
+              </Link>
             );
           })}
         </div>
