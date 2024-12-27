@@ -8,17 +8,20 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import Link from "next/link";
 import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
+import { useAppDispatch, useAppSelector } from "state/hooks";
 
-export default function Sidebar({ items }) {
-  const { loading, error, userProfile: user } = useGetUserProfile();
+export default function Sidebar() {
+  const dispatch = useAppDispatch();
+  const userProfile = useAppSelector(state => state.user.userInfo);
+  
   return (
     <div className=" border-t-2 border-[#F2F2F2]">
       <Image
-        src={user?.pic}
+        src={userProfile?.pic}
         alt="profile img"
-        width={90}
-        height={90}
-        className="rounded-full mt-6 max-w-40 mx-auto"
+        width={180}
+        height={180}
+        className="rounded-full mt-6 mx-auto  w-[160px] h-[160px] shadow-md bg-light shadow-shadows"
       />
 
       <div className="flex gap-7 flex-col text-black mt-10 text-lg border-b-2 border-[#F2F2F2] pb-6">
@@ -38,15 +41,14 @@ export default function Sidebar({ items }) {
             <TurnedInNotIcon /> <p>Saved Articles</p>
           </div>
         </Link>
-        {/* <div className="flex gap-3 items-center">
-          <SettingsIcon /> <p>Setting</p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <HelpIcon /> <p>Help</p>
-        </div> */}
-        <h3 className="mt-8">Recommended topics</h3>
+        <h3 className="mt-8">Following Topics</h3>
         <div className="flex flex-wrap gap-5">
-          {items.map((item) => {
+          {userProfile?.followingTopicsNames?.length === 0 && (
+            <span className="text-black bg-gray-300 px-3 py-1 rounded-2xl">
+              You're not follow any topics yet!
+            </span>
+          )}
+          {userProfile?.followingTopicsNames?.map((item) => {
             return (
               <button
                 key={item}

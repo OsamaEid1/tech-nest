@@ -4,7 +4,7 @@ import MainCard from "components/home/maincard/MainCard";
 import Sidebar from "components/home/Sidebar";
 import Tags from "components/home/Tags";
 
-export default function Home() {
+export default function Home({children}) {
   
   return (
     <div className="main-container">
@@ -13,12 +13,12 @@ export default function Home() {
         <div className="grid grid-cols-3">
           <div className="sm:col-span-2 col-span-3 px-6 border-r-2 border-t-2 border-[#F2F2F2]">
             <div className="border-b-2 border-gray-200">
-              <Tags items={TAGS} />
+              <Tags />
             </div>
-            <MainCard />
+            {children}
           </div>
           <div className="sm:col-span-1 px-6">
-            <Sidebar items={MAIN_TAGS}/>
+            <Sidebar />
           </div>
         </div>
       </main>
