@@ -15,27 +15,28 @@ export default function Sidebar() {
   const userProfile = useAppSelector((state) => state.user.userInfo);
 
   return (
-    <div className=" border-t-2 border-[#F2F2F2]">
-      <Image
-        src={userProfile?.pic}
-        alt="profile img"
-        width={180}
-        height={180}
-        className="rounded-full mt-6 mx-auto  w-[160px] h-[160px] shadow-md bg-light shadow-shadows"
-      />
+      <div className="pt-3 border-t-2 border-[#F2F2F2]">
+          <Image
+              src={userProfile.pic || "/assets/images/full-back-user.png"}
+              alt="User Image"
+              priority
+              width={160}
+              height={160}
+              className="rounded-full shadow shadow-hovers mx-auto"
+          />
 
       <div className="flex gap-7 flex-col text-black mt-10 text-lg border-b-2 border-[#F2F2F2] pb-6">
-        <Link href={"/profile"} className="flex gap-3 items-center hover:font-semibold hover:underline">
+        <Link href={"/profile"} className="flex gap-3 items-center duration-300 hover:text-hovers hover:underline">
           <PersonIcon /> <p>Profile</p>
         </Link>
-        <Link href={"/profile#my-articles"} className="flex gap-3 items-center hover:font-semibold hover:underline">
+        <Link href={"/profile#my-articles"} className="flex gap-3 items-center duration-300 hover:text-hovers hover:underline">
           <div className="flex gap-3 items-center">
             <LibraryBooksIcon /> <p>My Articles</p>
           </div>
         </Link>
         <Link
           href={"/manage-following-topics"}
-          className="flex gap-3 items-center hover:font-semibold hover:underline"
+          className="flex gap-3 items-center duration-300 hover:text-hovers hover:underline"
         >
           <div className="flex gap-3 items-center">
             <TurnedInNotIcon /> <p>Saved Articles</p>
@@ -53,14 +54,9 @@ export default function Sidebar() {
               <Link
                 key={index}
                 href={`/${item.toLowerCase().replaceAll(" ", "-")}`}
-                // className="text-black bg-gray-300 px-3 py-1 rounded-2xl"
+                className="text-black bg-slate-200 duration-300 hover:text-hovers px-3 py-1 rounded-2xl"
               >
-                <button
-                  key={item}
-                  className="text-black bg-gray-300 px-3 py-1 rounded-2xl"
-                >
-                  {item}
-                </button>
+                {item}
               </Link>
             );
           })}

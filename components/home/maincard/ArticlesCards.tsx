@@ -5,28 +5,31 @@ import { fetchRelatedArticles } from "app/helpers/user/article/fetchRelatedArtic
 import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { ArticleCard } from "app/helpers/constants";
 import Loading from "@components/ui/Loading";
+import { useAppSelector } from "state/hooks";
+import { usePathname } from "next/navigation";
 
 
-export default function Home() {
+export default function ArticlesCards() {
+  // Get Target Topic from the Dynamic Route /[topic]
+  const pathname = usePathname();
+  const targetTopic = pathname?.substring(1).replaceAll('-', ' ');
+  // Fetch User profile to know user's following topics
   const { loading: profileLoading, error: profileErr, userProfile } = useGetUserProfile();
-
+  // Fetch Articles States
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchErr, setFetchErr] = useState<string | null>(null);
-  const [staticData, setStaticData] = useState<ArticleCard[]>([]);
+  const [articles, Articles] = useState<ArticleCard[]>([]);
 
 
   useEffect(() => {
-    const fetchingData = async () => {
+    const fetchingData = async (targetTopics: string[]) => {
       setFetchLoading(true);
       setFetchErr(null);
 
       try {
-          const data = await fetchRelatedArticles(
-            userProfile?.followingTopicsNames as string[]
-          );
-          setStaticData(data);
+          const data = await fetchRelatedArticles(targetTopics);
+          Articles(data);
       } catch (error: any) {
-        console.error(error);
         setFetchErr(error);
       } finally {
         setFetchLoading(false);
@@ -34,21 +37,20 @@ export default function Home() {
     };
 
 
-    if (!profileLoading && userProfile) fetchingData();
-  }, [userProfile, profileLoading]);
+    if (targetTopic && targetTopic !== '') fetchingData(targetTopic.split(' '));
+    else if (userProfile) fetchingData(userProfile.followingTopicsNames)
+  }, [targetTopic, userProfile]);
   
   
   return (
     <div className="p-4">
       {(profileLoading || fetchLoading) && (<Loading />)}
       {(profileErr || fetchErr) && <span className="err-msg my-3">{profileErr || fetchErr}</span>}
-      {staticData.map((item) => (
+      {articles?.map((item) => (
         <Card
           key={item.id}
           title={item.title}
-          // text={item.content}
           author={item.authorName  || ""}
-          // date={item.createdAt || ""}
           views={item.likesCount}
           comments={item.commentsCount}
           imageUrl={item.thumbnail}

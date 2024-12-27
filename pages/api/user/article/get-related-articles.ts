@@ -1,7 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from 'pages/lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -40,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 });
 
                 if (!articles.length) 
-                    return res.status(404).json({ error: "There is no articles that related to topics you are follow yet!" });
+                    return res.status(404).json({ error: "There is no articles that related to such topic/s" });
             } else {
                 // Fetch all articles if no topics are provided
                 articles = await prisma.article.findMany({

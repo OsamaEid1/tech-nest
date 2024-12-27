@@ -19,6 +19,8 @@ export const useGetUserProfile = () => {
     const {loading: userCardinalitiesLoading, userInfo: userCardinalities} = useGetUserInfo();
     const handleFetchUserProfile = async () => {
         if (userCardinalities) {
+            setError(null);
+            
             try {
                 const user = await fetchUserProfile(userCardinalities.id);
                 dispatch(setUserInfo(user));
