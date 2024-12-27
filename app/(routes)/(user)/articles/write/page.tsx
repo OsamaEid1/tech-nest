@@ -134,7 +134,7 @@ const WriteArticlePage = () => {
                 >See your articles list</Link>
             </Popup>
             }
-            <h1 className="mb-8 text-center font-mono">Write Your Article</h1>
+            <h1 className="mb-8 text-center font-mono text-secTextColor italic">Write Your Article</h1>
             {/* Article Thumbnail */}
             <div className="my-10 p-6 bg-white rounded-main shadow-lg flex items-center justify-between">
                 <div>
@@ -175,7 +175,7 @@ const WriteArticlePage = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="font-bold text-xl !text-black"
-                inputStyles="p-2 mb-5 font-bold !shadow-lg"
+                inputStyles="mb-5 font-bold !text-xl !shadow-lg"
             />
             {/* ReactQuill (Article Editor) */}
             <div className="h-96 mb-4">
