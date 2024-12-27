@@ -1,5 +1,5 @@
 "use client";
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "@mui/material";
 import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
 import { Topic } from "app/helpers/constants";
@@ -18,12 +18,12 @@ const Tags: React.FC<CarouselProps> = () => {
     // Logic for adding a new tab or triggering an action
     alert("Add new tab action!");
   };
-  useEffect(()=>{
-    fetchAllTopics().then((data)=>{
-      setItems(data)
-    })
-  },[])
-  console.log(items)
+  useEffect(() => {
+    fetchAllTopics().then((data) => {
+      setItems(data);
+    });
+  }, []);
+  console.log(items);
   return (
     <div className="flex items-center space-x-2 ">
       {/* Tabs for carousel */}
@@ -33,29 +33,32 @@ const Tags: React.FC<CarouselProps> = () => {
         variant="scrollable"
         scrollButtons="auto"
         allowScrollButtonsMobile
-        TabIndicatorProps={{ style: { display: 'none' } }} // Hide the indicator
+        TabIndicatorProps={{ style: { display: "none" } }} // Hide the indicator
         TabScrollButtonProps={{
           sx: {
-            color: 'black', // Make the scroll buttons black
+            color: "black", // Make the scroll buttons black
           },
         }}
         className="flex-1"
       >
-       
+        {/* First tab as + button */}
+        <Tab
+          icon={<span className="text-black text-lg font-normal">All</span>}
+          // onClick={handleAddClick} // Trigger adding logic
+          className="capitalize text-sm text-black px-0"
+        />
+
         {/* Regular tabs */}
         {items.map((item, index) => (
           <Tab
             key={item.id}
             label={item.name}
             className={`capitalize text-sm ${
-              value === index + 1 ? 'text-black font-semibold' : 'text-gray-500'
+              value === index + 1 ? "text-black font-semibold" : "text-gray-500"
             }`}
           />
-          
         ))}
       </Tabs>
-      
-
     </div>
   );
 };

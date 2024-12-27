@@ -25,19 +25,25 @@ export default function Sidebar({ items }) {
         <Link href={"/profile"} className="flex gap-3 items-center">
           <PersonIcon /> <p>Profile</p>
         </Link>
-
-        <div className="flex gap-3 items-center">
-          <LibraryBooksIcon /> <p>Liberary</p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <TurnedInNotIcon /> <p>Stories</p>
-        </div>
-        <div className="flex gap-3 items-center">
+        <Link href={"/profile#my-articles"} className="flex gap-3 items-center">
+          <div className="flex gap-3 items-center">
+            <LibraryBooksIcon /> <p>My Articles</p>
+          </div>
+        </Link>
+        <Link
+          href={"/manage-following-topics"}
+          className="flex gap-3 items-center"
+        >
+          <div className="flex gap-3 items-center">
+            <TurnedInNotIcon /> <p>Saved Articles</p>
+          </div>
+        </Link>
+        {/* <div className="flex gap-3 items-center">
           <SettingsIcon /> <p>Setting</p>
         </div>
         <div className="flex gap-3 items-center">
           <HelpIcon /> <p>Help</p>
-        </div>
+        </div> */}
         <h3 className="mt-8">Recommended topics</h3>
         <div className="flex flex-wrap gap-5">
           {items.map((item) => {
