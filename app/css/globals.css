@@ -8,10 +8,6 @@
   padding: 0;
 }
 
-*:focus {
-  outline: #00A9C3 1px solid;
-}
-
 ::selection {
   background-color: black;
   color: #00A9C3;
@@ -53,6 +49,16 @@ h5 {
 h6 {
   font-size: 0.67em;
   font-weight: 700;
+}
+
+thead {
+      --tw-bg-opacity: 1;
+    background-color: rgb(100 116 139 / var(--tw-bg-opacity)) /* #64748b */;
+    color: white;
+}
+
+th {
+  font-weight: 600 !important;
 }
 
 input {
@@ -124,4 +130,5 @@ a:active {
   border: 0;
   border-bottom-right-radius: 0.75rem;
   border-bottom-left-radius: 0.75rem;
+  max-height: calc(24rem - 43px);
 }

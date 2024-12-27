@@ -1,119 +1,10 @@
+'use client'
 import React from 'react'
 import ManageArticlesTable from './components/ManageArticlesTable'
+import { useAppSelector } from 'state/hooks';
 
 function ManageArticles() {
-
-    const articles = [
-        {
-            id: '00',
-            title: 'Article Title',
-            authorName: 'Osama',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        {
-            id: '00',
-            title: 'Article Title2',
-            authorName: 'Ahmed',
-            createdAt: new Date()
-        },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-        // {
-        //     id: '00',
-        //     title: 'Article Title2',
-        //     authorName: 'Ahmed',
-        //     createdAt: new Date()
-        // },
-    ];
-
+    const pendingArticles = useAppSelector(state => state.articles.pendingArticles);
 
     return (
         <>
@@ -121,12 +12,10 @@ function ManageArticles() {
             <div
                 className='mt-10 mb-2 p-5 bg-white shadow rounded-main font-medium'
             >
-                Pending Articles: <span className='font-bold text-hovers'>{articles?.length}</span>
+                Pending Articles: <span className='font-bold text-hovers'>{pendingArticles.length}</span>
             </div>
             <div>
-                <ManageArticlesTable
-                    body={articles}
-                />
+                <ManageArticlesTable />
             </div>
         </>
     )

@@ -2,7 +2,7 @@ import React from 'react'
 
 type PopupProps = {
     type?: (string | "normal" | "success" | "delete"),
-    text: string, 
+    text?: string, 
     className?: string,
     options?: boolean,
     onConfirm?: () => void,
@@ -12,15 +12,15 @@ type PopupProps = {
 
 function Popup({ type, text, options, onConfirm, onToggle, className, children } : PopupProps) {
     // Set Styles based on the type of the Popup
-    let styles = "bg-gray-500"
+    let styles = "bg-slate-500"
     let buttonYesStyles = ""
     let buttonNoStyles = ""
     if (type === "success") {
         styles = "bg-green-600 text-white"
     } else if (type === "delete") {
         buttonYesStyles = "bg-white hover:bg-slate-200 text-red-600"
-        buttonNoStyles = "bg-slate-500 hover:bg-slate-600";
-        styles = "bg-red-600"
+        buttonNoStyles = "bg-slate-400 hover:bg-slate-600";
+        styles = "bg-red-600 text-white"
     }
 
     return (
@@ -51,26 +51,18 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
                             <h3 className="mb-5 text-lg font-normal ">
                                 {text}
                             </h3>
-                            {!options && (
-                                <button type="button" 
-                                    className={`
-                                        bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300
-                                        hover:bg-slate-200
-                                    `}
-                                    onClick={onToggle}
-                                    >
-                                    OK
-                                </button>
-                            )}
+                            {children}
                             {
                                 type != "success" && options && (<>
                                     <button type="button" 
                                         className={`
                                             py-2.5 px-5 rounded-main duration-300
+                                            ms-3 font-medium bg-white text-black
+                                            hover:bg-white/70
                                             ${buttonYesStyles}
                                         `}
                                         onClick={onConfirm}
-                                        >
+                                    >
                                         Yes
                                     </button>
                                     <button type="button"
@@ -84,7 +76,17 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
                                     </button>
                                 </>)
                             }
-                            {children}
+                            {!options && (
+                                <button type="button" 
+                                    className={`
+                                        bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300
+                                        hover:bg-slate-200
+                                    `}
+                                    onClick={onToggle}
+                                    >
+                                    OK
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

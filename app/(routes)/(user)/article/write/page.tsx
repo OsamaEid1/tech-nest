@@ -5,25 +5,46 @@ import "react-quill/dist/quill.snow.css";
 import MainInput from "@components/ui/form/MainInput";
 import MainButton from "@components/ui/form/MainButton";
 import Loading from "@components/ui/Loading";
-import ReactQuill from "react-quill"; // Import necessary types
+import ReactQuill from "react-quill";
+import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
+import { writeArticle } from "app/helpers/user/article/writeArticle";
+import Popup from "@components/ui/Popup";
+import Link from "next/link";
 
 // Dynamically import ReactQuill to handle SSR (react-quill requires a browser environment)
 // const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-type ArticleEditorProps = {
-    onSave: (title: string, content: string) => void;
+// Toolbar Options
+const quillModules = {
+    toolbar: [
+        [{ font: [] }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        ["blockquote", "code-block"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "image"],
+        ["clean"],
+    ],
 };
 
-const WriteArticlePage: React.FC<ArticleEditorProps> = () => {
+const WriteArticlePage = () => {
+    // Get User Profile To Use It In Store The Article Info
+    const {loading: userProfileLoading, error: userProfileErr, userProfile} = useGetUserProfile();
+    
     // Handle Article Thumbnail
-    const [thumbnail, setThumbnail] = useState<string | null>(null);
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+
+    const handleUploadThumbnailFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Save The Thumbnail File
+            setThumbnailFile(file);
             // Convert file to Base64
             const reader = new FileReader();
             reader.onloadend = () => {
-                setThumbnail(reader.result as string);
+                setThumbnailPreview(reader.result as string);
             };
             reader.readAsDataURL(file);
         }
@@ -32,32 +53,13 @@ const WriteArticlePage: React.FC<ArticleEditorProps> = () => {
     // Article Editor Space
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
-    // Toolbar Options
-    const quillModules = {
-        toolbar: [
-            [{ font: [] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline", "strike"],
-            [{ color: [] }, { background: [] }],
-            ["blockquote", "code-block"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
-            ["clean"],
-        ],
-    };
-
     // Handle Publishing The Article
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string| null>(null);
-    const handlePublishing = () => {
-        if (!title.trim() || !content.trim()) {
-            alert("Title and content cannot be empty!");
-            return;
-        }
-        handleGetText()
-        // console.log(getText(content));
-        // publishTheArticle();
-    };
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+    const [submitErr, setSubmitError] = useState<string| null>(null);
+    // Popup
+    const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
+
+    // Extract The Article Text to AI model can work with
     const quillRef = useRef<ReactQuill | null>(null);
     const handleGetText = () => {
         if (quillRef.current) {
@@ -67,21 +69,71 @@ const WriteArticlePage: React.FC<ArticleEditorProps> = () => {
         }
     };
     
+    // Publish the article Process
     const publishTheArticle = async () => {
-        setLoading(true);
-        setError(null);
+        // Reset Submit States
+        setSubmitLoading(true);
+        setSubmitError(null);
 
         try {
-            
-        } catch (error) {
-            
+            // Check Required User Info
+            if (!userProfile?.id || !userProfile?.name || !userProfile?.pic) {
+                console.error("Can't get user info for creating new article!");
+                throw 'There is an error occurred, refresh the page or try re-sign in.'
+            }
+            // Set Article Info in the form of Form Data to can parse the thumbnail image in backend API
+            const articleData = new FormData();
+            articleData.append('title', title);
+            articleData.append('content', content);
+            articleData.append('thumbnailFile', thumbnailFile ? thumbnailFile : '');
+            articleData.append("topics", ["python", "Data Science"].join());
+            articleData.append('authorId', userProfile.id);
+            articleData.append('authorName', userProfile.name);
+            articleData.append('authorPic', userProfile.pic);
+            // Call The API
+            await writeArticle(articleData);
+            setIsPopupOpened(true);
+        } catch (error: any) {
+            console.error(error);
+            setSubmitError(error);
         } finally {
-            setLoading(false);
+            setSubmitLoading(false);
         }
+    };
+    const handlePublishing = () => {
+        if (!title.trim() || !content.trim()) {
+            alert("Title and content cannot be empty!");
+            return;
+        }
+        // Pass the article content text to API Model to retrieve the suggested topics for the articles
+        // handleGetText();
+
+        publishTheArticle();
+    };
+
+    // Popup
+    const handlePopupToggle = () => {
+        setIsPopupOpened(false);
+        // Reset States
+        setTitle("");
+        setContent("");
+        setThumbnailFile(null);
+        setThumbnailPreview(null);
     };
 
     return (
         <div className="max-w-4xl mt-[90px] mb-14 mx-auto px-8 py-4 bg-white rounded-main shadow shadow-shadows relative">
+            {isPopupOpened && <Popup
+                type="success"
+                onToggle={handlePopupToggle}
+            >
+                <p>Your Article (<span className="font-medium text-black">{title}</span>) is published successfully✅</p>
+                <p className="font-medium italic">it's pending now until the admins review it.</p>
+                <Link href={'/profile#my-articles'}
+                    className="block my-2 mx-auto bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300 hover:bg-slate-200"
+                >See your articles list</Link>
+            </Popup>
+            }
             <h1 className="mb-8 text-center font-mono">Write Your Article</h1>
             {/* Article Thumbnail */}
             <div className="my-10 p-6 bg-white rounded-main shadow-lg flex items-center justify-between">
@@ -89,31 +141,31 @@ const WriteArticlePage: React.FC<ArticleEditorProps> = () => {
                     <h1 className="text-lg font-bold mb-4">Upload Article Thumbnail</h1>
                     {/* Thumbnail Upload Section */}
                     <label
-                        htmlFor="thumbnail-input"
+                        htmlFor="thumbnailPreview-input"
                         className="block mb-4 cursor-pointer text-center duration-300 bg-blue-500 text-white py-2 px-4 rounded-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
                     >
                         Choose Thumbnail
                         <input
-                            id="thumbnail-input"
+                            id="thumbnailPreview-input"
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={handleFileChange}
+                            onChange={handleUploadThumbnailFile}
                         />
                     </label>
                 </div>
                 {/* Preview Section */}
-                {thumbnail ? (
+                {thumbnailPreview ? (
                     <div className="mt-4">
                         <p className="text-gray-600 mb-2">Preview:</p>
                         <img
-                            src={thumbnail}
+                            src={thumbnailPreview}
                             alt="Thumbnail Preview"
                             className="w-full h-48 object-cover rounded-main"
                         />
                     </div>
                 ) : (
-                    <p className="text-gray-500">No thumbnail selected.</p>
+                    <p className="text-gray-500">No thumbnail selected!</p>
                 )}
             </div>
             {/* Title Input */}
@@ -138,13 +190,13 @@ const WriteArticlePage: React.FC<ArticleEditorProps> = () => {
                 />
             </div>
             {/* Submitting Process */}
-            {loading && (<Loading className="rounded-main" />)}
-            {error && (<span className="err-msg my-1">{error}</span>)} 
+            {submitLoading && (<Loading className="rounded-main" />)}
+            {submitErr && (<span className="err-msg my-1">{submitErr}</span>)} 
             {/* Publish Button */}
             <MainButton
                 onClick={handlePublishing}
                 className="px-5 mx-auto text-lg"
-                disabled={loading}
+                disabled={submitLoading}
             >
                 Publish
             </MainButton>

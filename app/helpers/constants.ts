@@ -30,11 +30,23 @@ interface ArticleCard {
     title: string,
     thumbnail: string,
     status: 'pending' | 'approved' | 'refused',
+    refusingReason?: string,
     likesCount: number,
     commentsCount: number,
     authorId?: string,
     authorName?: string,
-    authorPic?: string
+    authorPic?: string,
+    createdAt?: string,
+    topics?: string[]
+}
+
+interface PendingArticle {
+    id: string,
+    title: string,
+    content: string,
+    thumbnail: string,
+    authorName: string,
+    createdAt: string
 }
 
 const INITIAL_USER_INFO : UserInfo = {
@@ -101,5 +113,6 @@ export type {
     CommentData,
     UserInfo,
     Topic,
-    ArticleCard
+    ArticleCard,
+    PendingArticle
 }
