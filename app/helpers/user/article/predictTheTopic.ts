@@ -1,6 +1,6 @@
 export const predictTheTopic = async (article: string) => {
     try {
-        const response = await fetch("https://956b-34-83-138-168.ngrok-free.app/classify", {
+        const response = await fetch("https://be49-35-201-169-156.ngrok-free.app/classify", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
