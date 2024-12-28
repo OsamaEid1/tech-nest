@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <Provider store={store}>
       <html lang="en">
-        <body>
+        <body className="h-full w-full">
           {children}
         </body>
       </html>

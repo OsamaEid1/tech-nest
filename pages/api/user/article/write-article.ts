@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
 import * as formidable from "formidable";
-import fs from "fs"; // Import fs for file operations
 
 const prisma = new PrismaClient();
 
@@ -64,7 +63,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 console.error("Error occurred while creating new article:", error);
                 res.status(500).json({ error: "There is an error occurred, please try again later." });
             }
-
         });
     } else {
         res.setHeader("Allow", ["POST"]);

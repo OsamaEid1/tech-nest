@@ -7,7 +7,7 @@ interface LikeData {
 interface CommentData {
     userId: string,
     userName: string,
-    userPicPath: string,
+    userPic: string,
     content: string,
     createdAt: string
 }
@@ -29,7 +29,7 @@ interface ArticleCard {
     id: string,
     title: string,
     thumbnail: string,
-    status: 'pending' | 'approved' | 'refused',
+    status?: 'pending' | 'approved' | 'refused',
     refusingReason?: string,
     likesCount: number,
     commentsCount: number,
@@ -37,7 +37,7 @@ interface ArticleCard {
     authorName?: string,
     authorPic?: string,
     createdAt?: string,
-    topics?: string[]
+    topic?: string
 }
 
 interface PendingArticle {
@@ -47,6 +47,22 @@ interface PendingArticle {
     thumbnail: string,
     authorName: string,
     createdAt: string
+}
+
+interface Article {
+    id: string,
+    title: string,
+    thumbnail?: string,
+    content: string,
+    likes: LikeData[],
+    comments: CommentData[],
+    topic: string,
+    status: 'pending' | 'approved' | 'refused',
+    authorId: string,
+    authorName: string,
+    authorPic: string,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 const INITIAL_USER_INFO : UserInfo = {
@@ -66,53 +82,15 @@ interface Topic {
     createdAt: Date;
 };
 
-const TAGS: string[] = [
-  "Blockchain",
-  "Data Science",
-  "Technology",
-  "Programming",
-  "Machine Learning",
-  "Python",
-  "JavaScript",
-  "Artificial Intelligence",
-  "Data Visualization",
-  "Science",
-  "Tech",
-  "UX",
-  "Deep Learning",
-  "Data",
-  "Coding",
-  "Software Engineering",
-  "Web Development",
-  "AWS",
-  "DevOps",
-  "Big Data",
-  "Java",
-  "Android",
-  "Nodejs",
-  "Docker",
-  "Algorithms",
-];
-const MAIN_TAGS:string[]=[
-  "Data Science",
-  "Python",
-  "JavaScript",
-  "AWS",
-  "DevOps",
-  "Nodejs",
-  "Docker",
-]
-
-export {
-    INITIAL_USER_INFO,
-    TAGS,
-    MAIN_TAGS
-}
 export type {
     LikeData,
     CommentData,
     UserInfo,
     Topic,
+    Article,
     ArticleCard,
     PendingArticle
+}
+export {
+    INITIAL_USER_INFO,
 }

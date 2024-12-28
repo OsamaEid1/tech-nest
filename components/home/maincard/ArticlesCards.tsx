@@ -5,7 +5,6 @@ import { fetchRelatedArticles } from "app/helpers/user/article/fetchRelatedArtic
 import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { ArticleCard } from "app/helpers/constants";
 import Loading from "@components/ui/Loading";
-import { useAppSelector } from "state/hooks";
 import { usePathname } from "next/navigation";
 
 
@@ -37,7 +36,7 @@ export default function ArticlesCards() {
     };
 
 
-    if (targetTopic && targetTopic !== '') fetchingData(targetTopic.split(' '));
+    if (targetTopic && targetTopic !== '') fetchingData((targetTopic.charAt(0).toUpperCase() + targetTopic.slice(1).toLowerCase()).split(' '));
     else if (userProfile) fetchingData(userProfile.followingTopicsNames)
   }, [targetTopic, userProfile]);
   
@@ -49,12 +48,15 @@ export default function ArticlesCards() {
       {articles?.map((item) => (
         <Card
           key={item.id}
-          title={item.title}
-          author={item.authorName  || ""}
-          views={item.likesCount}
-          comments={item.commentsCount}
-          imageUrl={item.thumbnail}
           id={item.id}
+          title={item.title}
+          authorName={item.authorName}
+          authorId={item.authorId}
+          authorPic={item.authorPic}
+          likesCount={item.likesCount}
+          commentsCount={item.commentsCount}
+          thumbnail={item.thumbnail}
+          createdAt={item.createdAt}
         />
       ))}
     </div>
