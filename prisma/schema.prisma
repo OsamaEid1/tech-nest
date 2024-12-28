@@ -32,7 +32,7 @@ model Article {
   title      String
   thumbnail  String?
   content    String
-  topics     String[]
+  topic      String
   likes      Json[]
   comments   Json[]
   createdAt  DateTime? @default(now())

@@ -18,8 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // Fetch articles that have matching topics
                 articles = await prisma.article.findMany({
                     where: {
-                        topics: {
-                            hasSome: topicsArray,
+                        topic: {
+                            in: topicsArray,
                         },
                         status: 'approved'
                     },
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         id: true,
                         title: true,
                         thumbnail: true,
-                        topics: true,
+                        topic: true,
                         likes: true,
                         comments: true,
                         authorId: true,
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         id: true,
                         title: true,
                         thumbnail: true,
-                        topics: true,
+                        topic: true,
                         likes: true,
                         comments: true,
                         authorId: true,
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 id: article.id,
                 title: article.title,
                 thumbnail: article.thumbnail,
-                topics: article.topics,
+                topic: article.topic,
                 likesCount: article.likes.length,
                 commentsCount: article.comments.length,
                 authorId: article.authorId,

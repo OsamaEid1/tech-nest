@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "@mui/material";
 import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
-import { Topic } from "app/helpers/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Loading from "@components/ui/Loading";
+import { setAllTopics } from "state/slices/topicsSlice";
+import { useAppDispatch, useAppSelector } from "state/hooks";
 
 const Tags = () => {
     // Use usePathname to get the current route
@@ -13,27 +13,30 @@ const Tags = () => {
     pathname = pathname?.substring(1) || null;
     // Handle Topics Tabs
     const [activeTab, setActiveTab] = useState<number>(0);
-    const [topics, setTopics] = useState<Topic[]>([]);
+    const dispatch = useAppDispatch();
+    const allTopics = useAppSelector(state => state.topics.allTopics);
 
     // Fetch All Topics
     useEffect(() => {
-        fetchAllTopics().then((data) => {
-        setTopics(data);
-        });
+        if (!allTopics.length) {
+            fetchAllTopics().then((data) => {
+                dispatch(setAllTopics(data));
+            });
+        }
     }, []);
     
     // Find the active tab based on the current route and Activate its related tab
     useEffect(() => {
-        if (pathname && topics) {
+        if (pathname && allTopics) {
 
-        const activeIndex = topics?.findIndex(
+        const activeIndex = allTopics?.findIndex(
             (item) => item.name.toLowerCase().replaceAll(" ", "-") === pathname
         );
         console.log(pathname, activeIndex);
         // Offset for "All" and "Following"
         setActiveTab(activeIndex >= 0 ? activeIndex + 2 : 0);
         }
-    }, [pathname, topics])
+    }, [pathname, allTopics])
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setActiveTab(newValue);
@@ -41,7 +44,7 @@ const Tags = () => {
 
 console.log(activeTab);
     return (
-        <div className="flex topics-center space-x-2">
+        <div className="flex text-center space-x-2">
             <Tabs
                 value={2}
                 variant="scrollable"
@@ -74,7 +77,7 @@ console.log(activeTab);
                     />
                 </Link>
                 {/* Dynamic Tabs */}
-                {topics.map((item, index) => (
+                {allTopics.map((item, index) => (
                     <Link
                         href={`/${item.name.toLowerCase().replaceAll(" ", "-")}`}
                         key={item.id}

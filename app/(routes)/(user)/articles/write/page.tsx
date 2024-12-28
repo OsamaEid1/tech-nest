@@ -1,5 +1,5 @@
 'use client'
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import MainInput from "@components/ui/form/MainInput";
@@ -10,6 +10,12 @@ import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { writeArticle } from "app/helpers/user/article/writeArticle";
 import Popup from "@components/ui/Popup";
 import Link from "next/link";
+import { predictTheTopic } from "app/helpers/user/article/predictTheTopic";
+import { Autocomplete, Stack, TextField } from "@mui/material";
+import { Topic } from "app/helpers/constants";
+import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
+import { useAppDispatch, useAppSelector } from "state/hooks";
+import { setAllTopics } from "state/slices/topicsSlice";
 
 // Dynamically import ReactQuill to handle SSR (react-quill requires a browser environment)
 // const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -35,7 +41,6 @@ const WriteArticlePage = () => {
     // Handle Article Thumbnail
     const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-
     const handleUploadThumbnailFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -59,17 +64,77 @@ const WriteArticlePage = () => {
     // Popup
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
 
+    
+    
     // Extract The Article Text to AI model can work with
     const quillRef = useRef<ReactQuill | null>(null);
     const handleGetText = () => {
         if (quillRef.current) {
             const quill = quillRef.current.getEditor();
             const plainText = quill.getText();
-            console.log("Plain Text:", plainText);
+            if (plainText.trim() !== '')
+                return plainText;
+        }
+        return null;
+    };
+    // Handle Predict The Article's Topic
+    const [predictedTopic, setPredictedTopic] = useState<string | null>(null);
+    const [predictingLoading, setPredictingLoading] = useState<boolean>(false);
+    const [predictingErr, setPredictingErr] = useState<string | null>(null);
+    const handlePredictTheTopic = async () => {
+        setShowSearchTopicsBar(false);
+        setChosenTopic(null);
+        setPredictingLoading(true);
+        setPredictingErr(null);
+        
+        try {
+            const articleText = handleGetText();
+            if (!articleText) 
+                throw 'You must write an article first!'
+            
+            const predictingTopic = await predictTheTopic(articleText);
+            setPredictedTopic(predictingTopic);
+        } catch (error: any) {
+            setPredictingErr(error);
+        } finally {
+            setPredictingLoading(false);
         }
     };
+    // Handle Choose The Article's Topic
+    const dispatch = useAppDispatch();
+    const allTopics = useAppSelector(state => state.topics.allTopics);
+    const [showSearchTopicsBar, setShowSearchTopicsBar] = useState<boolean>(false);
+    const [chosenTopic, setChosenTopic] = useState<string | null>(null);
+    const [fetchAllTopicsLoading, setFetchAllTopicsLoading] = useState<boolean>(false);
+    const [fetchAllTopicsErr, setFetchAllTopicsErr] = useState<string | null>(null);
+    const handleGetAllTopics = async () => {
+        if (!showSearchTopicsBar) {
+            // Reset Predicted Topic
+            setPredictedTopic(null);
+            // Toggle Search Bar
+            setShowSearchTopicsBar(true);
+            // Check if All Topics Already Fetched
+            if (allTopics.length > 0) 
+                return;
     
-    // Publish the article Process
+            // Fetch Topics for the first time
+            setFetchAllTopicsLoading(true);
+            setFetchAllTopicsErr(null);
+            try {
+                const topics = await fetchAllTopics();
+                dispatch(setAllTopics(topics));
+            } catch (error: any) {
+                setFetchAllTopicsErr('There is an error occurred, you can try automatic suggest the topic for now');
+            } finally {
+                setFetchAllTopicsLoading(false);
+            }
+        } else {
+            setShowSearchTopicsBar(false);
+        }
+    };
+
+
+    // Publish article Process
     const publishTheArticle = async () => {
         // Reset Submit States
         setSubmitLoading(true);
@@ -86,7 +151,8 @@ const WriteArticlePage = () => {
             articleData.append('title', title);
             articleData.append('content', content);
             articleData.append('thumbnailFile', thumbnailFile ? thumbnailFile : '');
-            articleData.append("topics", ["python", "Data Science"].join());
+            if (predictedTopic) articleData.append("topic", predictedTopic);
+            if (chosenTopic) articleData.append("topic", chosenTopic);
             articleData.append('authorId', userProfile.id);
             articleData.append('authorName', userProfile.name);
             articleData.append('authorPic', userProfile.pic);
@@ -101,12 +167,10 @@ const WriteArticlePage = () => {
         }
     };
     const handlePublishing = () => {
-        if (!title.trim() || !content.trim()) {
-            alert("Title and content cannot be empty!");
+        if (!title.trim() || !content.trim() || !(predictedTopic || chosenTopic)) {
+            alert("Thumbnail, Title, content, and Topic cannot be empty!");
             return;
         }
-        // Pass the article content text to API Model to retrieve the suggested topics for the articles
-        // handleGetText();
 
         publishTheArticle();
     };
@@ -119,7 +183,9 @@ const WriteArticlePage = () => {
         setContent("");
         setThumbnailFile(null);
         setThumbnailPreview(null);
+        setShowSearchTopicsBar(false);
     };
+
 
     return (
         <div className="max-w-4xl mt-[90px] mb-14 mx-auto px-8 py-4 bg-white rounded-main shadow shadow-shadows relative">
@@ -131,7 +197,9 @@ const WriteArticlePage = () => {
                 <p className="font-medium italic">it's pending now until the admins review it.</p>
                 <Link href={'/profile#my-articles'}
                     className="block my-2 mx-auto bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300 hover:bg-slate-200"
-                >See your articles list</Link>
+                >
+                    See your articles list
+                </Link>
             </Popup>
             }
             <h1 className="mb-8 text-center font-mono text-secTextColor italic">Write Your Article</h1>
@@ -189,6 +257,48 @@ const WriteArticlePage = () => {
                     onChange={setContent}
                 />
             </div>
+            {/* Suggested / Write The Related Topic */}
+            <hr className='my-6' />
+            <div className="relative">
+                <h3>The Article's Topic: </h3>
+                <div className='flex gap-7 mt-3'>
+                    {/* System Will SUGGEST The Topic Based On Article Text Using AI Model */}
+                    <MainButton
+                        className="!bg-hovers hover:!bg-hovers/80 disabled:!bg-gray-600"
+                        disabled={(thumbnailFile && title && content) ? false : true}
+                        onClick={handlePredictTheTopic}
+                    >
+                        Suggest To Me
+                    </MainButton>
+                    {/* User Will Select The Topic By Himself */}
+                    <MainButton
+                        onClick={handleGetAllTopics}
+                    >
+                        {showSearchTopicsBar ? 'Hide Search Bar' : 'I will Choose'}
+                    </MainButton>
+                </div>
+                {/* Topics Search Bar FOR USER Choosing Case */}
+                {showSearchTopicsBar && (!fetchAllTopicsLoading || !fetchAllTopicsErr) && allTopics.length > 0 && (
+                    <Autocomplete
+                        id="free-solo-demo"
+                        freeSolo
+                        options={allTopics.map((topic) => topic.name)}
+                        renderInput={(params) => <TextField {...params} label="Topic" />}
+                        className="rounded-main my-5"
+                        onChange={(e, value) => setChosenTopic(value)}
+                    />
+                )}
+                {/* Fetch All Topics Process */}
+                {fetchAllTopicsErr && (<span className="err-msg my-1">{fetchAllTopicsErr}</span>)}
+                {fetchAllTopicsLoading && (<Loading className="p-1" />)}
+
+                {/* Suggesting Process */}
+                {predictedTopic && (<p className="font-semibold text-center">The Suggested Topic Is: <span className="font-bold text-xl text-hovers">{predictedTopic}</span></p>)}
+                {predictingLoading && (<Loading className="p-1" />)}
+                {predictingErr && (<span className="err-msg my-1">{predictingErr}</span>)} 
+            </div>
+
+            <hr className="my-6" />
             {/* Submitting Process */}
             {submitLoading && (<Loading className="rounded-main" />)}
             {submitErr && (<span className="err-msg my-1">{submitErr}</span>)} 
@@ -196,7 +306,7 @@ const WriteArticlePage = () => {
             <MainButton
                 onClick={handlePublishing}
                 className="px-5 mx-auto text-lg"
-                disabled={submitLoading}
+                disabled={(!submitLoading && (thumbnailFile && title && content && (predictedTopic || chosenTopic))) ? false : true}
             >
                 Publish
             </MainButton>

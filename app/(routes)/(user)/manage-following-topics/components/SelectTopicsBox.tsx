@@ -8,6 +8,7 @@ import { updateFollowingTopics } from 'app/helpers/topics/updateFollowingTopics'
 import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { setUserInfo } from 'state/slices/userSlice';
 import Popup from '@components/ui/Popup';
+import { Topic } from 'app/helpers/constants';
 
 function SelectTopicsBox() {
     // Handle Fetch All Topics From DB
@@ -16,7 +17,7 @@ function SelectTopicsBox() {
     // Handle Displayed Topics
     const [topicsInSelectBox, setTopicsInSelectBox] = useState<string[]>();
     useEffect(() => {if (allTopics) setTopicsInSelectBox(allTopics)}, [allTopics]);
-    
+
     // Handle Get Topics that user already follow
     const {loading: fetchFTopicsLoading, error: fetchFTopicsErr, followingTopics} = useGetFollowingTopics();
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -52,7 +53,7 @@ function SelectTopicsBox() {
         setSelectedTopics(updatedSelectedTopics);
 
         // Add The Deselected Topic To The Select Topics Box
-        setTopicsInSelectBox(topicsInSelectBox ? [...topicsInSelectBox, topic] : allTopics);
+        setTopicsInSelectBox(topicsInSelectBox ? [...topicsInSelectBox, topic] : allTopics as string[]);
     };
 
     // Handle Save Updated Following Topics For The User
