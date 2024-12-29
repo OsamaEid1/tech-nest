@@ -7,11 +7,15 @@ import { Article } from "app/helpers/constants";
 import Loading from "@components/ui/Loading";
 import ArticleFooter from "./components/ArticleFooter";
 import useGetUserInfo from "app/helpers/hooks/user/useGetUserInfo";
+import { useAppSelector } from "state/hooks";
 
 
 export default function Page() {
   const params = useParams();
   if (!params?.id) history.back();
+  
+  // Fetch User Info, If User has role Admin then disappear the user info and interactions Sections
+  const {loading: userInfoLoading, userInfo} = useGetUserInfo();
 
   // Fetch The Article
   const [article, setArticle] = useState<Article | null>(null);
@@ -33,13 +37,16 @@ export default function Page() {
   useEffect(() => {
     if (params?.id) handleGetArticle(params.id as string);
   }, []);
-  
-  // Fetch User Info, If User has role Admin then disappear the user info and interactions Sections
-  const {loading: userInfoLoading, userInfo} = useGetUserInfo();
+
+  // Trigger Updates for Article (Likes, Comments, etc)
+  const updatedArticle = useAppSelector(state => state.articles.article);
+  useEffect(() => {
+    if (Object.keys(updatedArticle).length) setArticle(updatedArticle as Article);
+  }, [updatedArticle]);
 
   return (
     <div className="container lg:w-[800px] 2xl:w-[900px] mx-auto pt-10 pb-14 min-h-screen">
-      {loading && (<Loading />)}
+      {(loading || !article) && (<Loading />)}
       {error && (<span className="err-msg my-1">{error}</span>)}
       {article && (
         <div className="">
@@ -47,7 +54,7 @@ export default function Page() {
           <Image 
             src={article?.thumbnail || '/assets/images/full-back-article.jpeg'} 
             alt="Article Thumbnail" 
-            className="w-full rounded-main mt-4 mb-8"
+            className="w-full rounded-main mt-4 mb-8 bg-gray-200"
             width={400} 
             height={400} 
           />

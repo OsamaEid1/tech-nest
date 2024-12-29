@@ -1,4 +1,3 @@
-"use client"
 import SelectTopicsBox from './components/SelectTopicsBox'
 
 function ManageFollowingTopics() {

@@ -1,4 +1,4 @@
-async function updateSavedArticles(userId: string, savedArticlesIDs: string[]) {
+export default async function updateSavedArticles(userId: string, savedArticlesIDs: string[]) {
     try {
         const response = await fetch('/api/user/article/update-saved-articles', {
             method: 'PUT',
@@ -14,7 +14,7 @@ async function updateSavedArticles(userId: string, savedArticlesIDs: string[]) {
         }
 
         const data = await response.json();
-        return data;
+        return data.user;
     } catch (error) {
         if (typeof error !== "string")
             throw "There is an error occurred, Please try again later!";

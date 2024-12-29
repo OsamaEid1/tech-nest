@@ -16,6 +16,8 @@ export const useGetAllTopics = () => {
     const setTopics = (topics) => {
         const topicsNames = topics.map((topic) => topic.name);
         setAllTopicsLocally(topicsNames);
+        setLoading(false);
+        setError(null);
     };
 
     const handleGetAllTopics = async () => {
@@ -35,11 +37,7 @@ export const useGetAllTopics = () => {
 
     useEffect(() => {
         if (!allTopicsRedux.length) handleGetAllTopics();
-        else {
-            setTopics(allTopicsRedux);
-            setLoading(false);
-            setError(null);
-        }
+        else setTopics(allTopicsRedux);
     }, []);
 
     return { loading, error, allTopics }

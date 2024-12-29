@@ -1,7 +1,7 @@
 interface LikeData {
     userId: string,
     userName: string,
-    userPicPath: string,
+    userPic: string,
     createdAt: string
 }
 interface CommentData {
@@ -32,6 +32,7 @@ interface ArticleCard {
     status?: 'pending' | 'approved' | 'refused',
     refusingReason?: string,
     likesCount: number,
+    likes?: LikeData[],
     commentsCount: number,
     authorId?: string,
     authorName?: string,

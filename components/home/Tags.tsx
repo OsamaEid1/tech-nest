@@ -32,17 +32,12 @@ const Tags = () => {
         const activeIndex = allTopics?.findIndex(
             (item) => item.name.toLowerCase().replaceAll(" ", "-") === pathname
         );
-        console.log(pathname, activeIndex);
         // Offset for "All" and "Following"
         setActiveTab(activeIndex >= 0 ? activeIndex + 2 : 0);
         }
     }, [pathname, allTopics])
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setActiveTab(newValue);
-    };
-
-console.log(activeTab);
+console.log(pathname);
     return (
         <div className="flex text-center space-x-2">
             <Tabs
@@ -69,7 +64,7 @@ console.log(activeTab);
                 <Link href={"/"}>
                     <Tab
                         label="For You"
-                        className={`h-full capitalize text-sm block whitespace-nowrap ${
+                        className={`h-full capitalize text-sm !block !whitespace-nowrap ${
                             !pathname
                                 ? "text-hovers font-semibold"
                                 : "text-gray-500 duration-300 hover:bg-gray-200 hover:text-hovers"
@@ -84,7 +79,7 @@ console.log(activeTab);
                     >
                         <Tab
                             label={item.name}
-                            className={`h-full capitalize text-sm block whitespace-nowrap duration-300 hover:bg-gray-200 hover:text-hovers ${
+                            className={`h-full capitalize text-sm !block !whitespace-nowrap duration-300 hover:bg-gray-200 hover:text-hovers ${
                                 activeTab === index + 2
                                     ? "text-hovers font-semibold"
                                     : "text-gray-500"
