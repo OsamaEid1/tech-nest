@@ -67,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 title: article.title,
                 thumbnail: article.thumbnail,
                 topic: article.topic,
-                likesCount: article.likes.length,
+                likes: article.likes,
                 commentsCount: article.comments.length,
                 authorId: article.authorId,
                 authorName: article.authorName,

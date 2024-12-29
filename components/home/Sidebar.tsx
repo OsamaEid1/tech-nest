@@ -7,7 +7,6 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import Link from "next/link";
-import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { useAppDispatch, useAppSelector } from "state/hooks";
 
 export default function Sidebar() {
@@ -15,7 +14,7 @@ export default function Sidebar() {
   const userProfile = useAppSelector((state) => state.user.userInfo);
 
   return (
-      <div className="pt-3 border-t-2 border-[#F2F2F2]">
+      <div className="pt-3 ">
           <Image
               src={userProfile.pic || "/assets/images/full-back-user.png"}
               alt="User Image"
@@ -35,7 +34,7 @@ export default function Sidebar() {
           </div>
         </Link>
         <Link
-          href={"/manage-following-topics"}
+          href={"/profile#saved-articles"}
           className="flex gap-3 items-center duration-300 hover:text-hovers hover:underline"
         >
           <div className="flex gap-3 items-center">

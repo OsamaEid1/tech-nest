@@ -86,6 +86,7 @@ const WriteArticlePage = () => {
         setChosenTopic(null);
         setPredictingLoading(true);
         setPredictingErr(null);
+        setFetchAllTopicsErr(null);
         
         try {
             const articleText = handleGetText();
@@ -120,6 +121,7 @@ const WriteArticlePage = () => {
             // Fetch Topics for the first time
             setFetchAllTopicsLoading(true);
             setFetchAllTopicsErr(null);
+            setPredictingErr(null);
             try {
                 const topics = await fetchAllTopics();
                 dispatch(setAllTopics(topics));
@@ -172,6 +174,8 @@ const WriteArticlePage = () => {
             return;
         }
 
+        setFetchAllTopicsErr(null);
+        setPredictingErr(null);
         publishTheArticle();
     };
 

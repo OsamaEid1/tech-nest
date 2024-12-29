@@ -186,7 +186,7 @@ function ManageArticlesTable() {
                                         className="px-6 py-3 text-left max-w-24 truncate"
                                     >
                                         <Link
-                                            href={`/article/${article.id}`}
+                                            href={`/articles/${article.id}`}
                                             target="_blank"
                                             className="underline block hover:text-hovers hover:no-underline group-hover:text-white"
                                             title={article.title}
@@ -225,8 +225,6 @@ function ManageArticlesTable() {
                                             </button>
                                         </div>
                                     </td>
-                                    {/* <td className="px-6 py-4"> */}
-                                    {/* </td> */}
                                 </tr>
                             ))
                         )}

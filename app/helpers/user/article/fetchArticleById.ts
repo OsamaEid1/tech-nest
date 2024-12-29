@@ -1,4 +1,4 @@
-export const fetchUserProfile = async (id: string) => {
+export const fetchArticleById = async (id: string) => {
     try {
         const response = await fetch(`/api/user/article/get-article?id=${id}`);
         

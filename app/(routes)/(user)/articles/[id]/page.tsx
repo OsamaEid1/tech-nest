@@ -1,97 +1,83 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Header from "components/layout/Header";
 import Image from "next/image";
-import star from "public/assets/Designer.png";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CommentIcon from "@mui/icons-material/Comment";
-// Sample static data
-const staticData = [
-  {
-    title: "Mental Note Vol. 24",
-    text: "Merry Christmas and Happy Holidays...",
-    author: "Ryan Fan",
-    date: "Oct 1",
-    views: 479,
-    comments: 8,
-    imageUrl: "/assets/images/profile.png",
-    id: 0,
-  },
-  {
-    title: "Your Brain On Coronavirus",
-    text: "A guide to the curious and troubling impact of the pandemic...",
-    author: "Simon Spichak",
-    date: "Sep 23",
-    views: 320,
-    comments: 5,
-    imageUrl: "/assets/images/profile.png",
-    id: 1,
-  },
-];
+import { fetchArticleById } from "app/helpers/user/article/fetchArticleById";
+import { Article } from "app/helpers/constants";
+import Loading from "@components/ui/Loading";
+import ArticleFooter from "./components/ArticleFooter";
+import useGetUserInfo from "app/helpers/hooks/user/useGetUserInfo";
+import { useAppSelector } from "state/hooks";
+
 
 export default function Page() {
-  const { id } = useParams(); // Extract the dynamic id from the URL
-  const card = staticData.find((item) => item.id === Number(id));
+  const params = useParams();
+  if (!params?.id) history.back();
+  
+  // Fetch User Info, If User has role Admin then disappear the user info and interactions Sections
+  const {loading: userInfoLoading, userInfo} = useGetUserInfo();
 
-  if (!card) {
-    return <p>Card not found</p>;
-  }
+  // Fetch The Article
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const handleGetArticle = async (articleId: string) => {
+    setLoading(false);
+    setError(null);
+
+    try {
+      const article = await fetchArticleById(articleId);
+      setArticle(article);
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (params?.id) handleGetArticle(params.id as string);
+  }, []);
+
+  // Trigger Updates for Article (Likes, Comments, etc)
+  const updatedArticle = useAppSelector(state => state.articles.article);
+  useEffect(() => {
+    if (Object.keys(updatedArticle).length) setArticle(updatedArticle as Article);
+  }, [updatedArticle]);
 
   return (
-    <div className="text-black">
-      <Header />
-      <div className=" mx-32 text-start">
-        <div className="flex gap-4">
-          <Image src="/assets/Designer.png" alt="" width={20} height={20} />
-          <p>Member-only story</p>
-        </div>
-
-        <h1 className="text-[50px]">{card.title}</h1>
-        <div className="flex gap-6 mt-4">
-          <Image
-            src="/assets/autherimg.jpg"
-            width={30}
-            height={30}
-            alt="auther img"
+    <div className="container lg:w-[800px] 2xl:w-[900px] mx-auto pt-10 pb-14 min-h-screen">
+      {(loading || !article) && (<Loading />)}
+      {error && (<span className="err-msg my-1">{error}</span>)}
+      {article && (
+        <div className="">
+          <h1>{article.title}</h1>
+          <Image 
+            src={article?.thumbnail || '/assets/images/full-back-article.jpeg'} 
+            alt="Article Thumbnail" 
+            className="w-full rounded-main mt-4 mb-8 bg-gray-200"
+            width={400} 
+            height={400} 
           />
-          <p className="text-2xl text-gray-700 font-semibold">{card.text}</p>
+          <hr className="my-5" />
+          {/* Start Content */}
+          <div 
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
+          {/* End Content */}
+          {userInfo?.role !== 'ADMIN' && (
+            <>
+              <hr className="mb-5 mt-12" />
+              <ArticleFooter
+                articleId={article.id}
+                authorName={article.authorName}
+                authorPic={article.authorPic}
+                likes={article.likes}
+                comments={article.comments}
+              />
+            </>
+          )}
         </div>
-        <div className="flex items-center text-gray-400  space-x-4 border-y-2 border-gray-200 py-3 mt-8">
-          <div className="flex items-center">
-            <span className="ml-1">{card.date}</span>
-          </div>
-          <div className="flex items-center">
-            <VisibilityIcon fontSize="small" />
-            <span className="ml-1">{card.views}</span>
-          </div>
-          <div className="flex items-center">
-            <CommentIcon fontSize="small" />
-            <span className="ml-1">{card.comments}</span>
-          </div>
-        </div>
-        <Image
-          src={card.imageUrl}
-          alt="img"
-          width={600}
-          height={500}
-          className="mx-auto mt-10"
-        />
-        <p className="text-2xl font-normal mt-8 ">
-          {card.text} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Distinctio eos sequi esse nobis iusto enim architecto minus.
-          Distinctio incidunt adipisci totam laborum tenetur aut, explicabo ex
-          eius doloribus animi placeat harum dolor odit id ullam beatae
-          excepturi libero. Veritatis dolore ea voluptates placeat
-          necessitatibus quod excepturi quasi dolorum cupiditate rerum! Lorem
-          ipsum dolor sit, amet consectetur adipisicing elit. Dicta quia alias
-          ratione maiores fuga, eveniet, id nesciunt facere voluptatum provident
-          assumenda hic sapiente debitis recusandae repudiandae aliquid eum
-          placeat harum architecto quaerat perspiciatis! Nam, vel unde qui ab
-          beatae, id excepturi aperiam rem magnam nisi magni molestias fugiat?
-          Eaque, cumque!
-        </p>
-      </div>
+      )}
     </div>
   );
 }

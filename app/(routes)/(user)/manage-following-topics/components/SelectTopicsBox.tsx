@@ -16,8 +16,8 @@ function SelectTopicsBox() {
     
     // Handle Displayed Topics
     const [topicsInSelectBox, setTopicsInSelectBox] = useState<string[]>();
-    useEffect(() => {if (allTopics) setTopicsInSelectBox(allTopics)}, [allTopics]);
-
+    useEffect(() => {if (allTopics) setTopicsInSelectBox(allTopics)}, [allTopicsLoading, allTopics]);
+console.log(allTopics);
     // Handle Get Topics that user already follow
     const {loading: fetchFTopicsLoading, error: fetchFTopicsErr, followingTopics} = useGetFollowingTopics();
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -29,8 +29,7 @@ function SelectTopicsBox() {
             const updatedTopicsInSelectBox = topicsInSelectBox?.filter(topic => !followingTopics.includes(topic));
             setTopicsInSelectBox(updatedTopicsInSelectBox);
         }
-
-    }, [followingTopics])
+    }, [followingTopics]);
 
     // Handle Select/Deselect the topics
     const handleSelectTopic = (topic : string) => {
@@ -62,7 +61,6 @@ function SelectTopicsBox() {
     const dispatch = useAppDispatch();
     const userInfo = useAppSelector(state => state.user.userInfo);
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
-
     const handleSaveUpdatedFollowingTopics = async () => {
         setSaveFTopicsLoading(true);
         setSaveFTopicsErr(null);

@@ -5,8 +5,9 @@ import { fetchRelatedArticles } from "app/helpers/user/article/fetchRelatedArtic
 import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { ArticleCard } from "app/helpers/constants";
 import Loading from "@components/ui/Loading";
-import { useAppSelector } from "state/hooks";
 import { usePathname } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "state/hooks";
+import { setUpdatedArticles } from "state/slices/articleSlice";
 
 
 export default function ArticlesCards() {
@@ -18,17 +19,21 @@ export default function ArticlesCards() {
   // Fetch Articles States
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchErr, setFetchErr] = useState<string | null>(null);
-  const [articles, Articles] = useState<ArticleCard[]>([]);
+  const [articles, setArticles] = useState<ArticleCard[]>([]);
+  // Trigger Articles Updates
+  const dispatch = useAppDispatch();
+  const updatedArticles = useAppSelector(state => state.articles.articles);
 
-
+  // Fetch Related Articles
   useEffect(() => {
     const fetchingData = async (targetTopics: string[]) => {
       setFetchLoading(true);
       setFetchErr(null);
 
       try {
-          const data = await fetchRelatedArticles(targetTopics);
-          Articles(data);
+          const fetchedArticles = await fetchRelatedArticles(targetTopics);
+          setArticles(fetchedArticles);
+          dispatch(setUpdatedArticles(fetchedArticles));
       } catch (error: any) {
         setFetchErr(error);
       } finally {
@@ -37,10 +42,16 @@ export default function ArticlesCards() {
     };
 
 
-    if (targetTopic && targetTopic !== '') fetchingData(targetTopic.split(' '));
+    if (targetTopic && targetTopic !== '') fetchingData((targetTopic.charAt(0).toUpperCase() + targetTopic.slice(1).toLowerCase()).split(' '));
     else if (userProfile) fetchingData(userProfile.followingTopicsNames)
   }, [targetTopic, userProfile]);
   
+  // Trigger Articles Updates (likes, delete, etc)
+  useEffect(() => {
+    if (updatedArticles) setArticles(updatedArticles);
+  }, [updatedArticles])
+
+
   
   return (
     <div className="p-4">
@@ -49,12 +60,16 @@ export default function ArticlesCards() {
       {articles?.map((item) => (
         <Card
           key={item.id}
-          title={item.title}
-          author={item.authorName  || ""}
-          views={item.likesCount}
-          comments={item.commentsCount}
-          imageUrl={item.thumbnail}
           id={item.id}
+          title={item.title}
+          authorName={item.authorName}
+          authorId={item.authorId}
+          authorPic={item.authorPic}
+          likes={item.likes}
+          likesCount={item.likesCount}
+          commentsCount={item.commentsCount}
+          thumbnail={item.thumbnail}
+          createdAt={item.createdAt}
         />
       ))}
     </div>

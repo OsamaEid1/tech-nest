@@ -147,7 +147,7 @@ function MainContent({ userId, savedArticlesIDs }) {
                     )}
                 </Slider>
                 <Link
-                    href="article/write"
+                    href="articles/write"
                     className="block mt-3 text-right text-green-600 font-semibold underline duration-300 hover:no-underline"
                 >
                     Browse more articles?

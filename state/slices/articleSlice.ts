@@ -1,5 +1,6 @@
+import ArticlesCards from "@components/home/maincard/ArticlesCards";
 import { createSlice } from "@reduxjs/toolkit";
-import { ArticleCard, PendingArticle } from "app/helpers/constants";
+import { Article, ArticleCard, PendingArticle } from "app/helpers/constants";
 
 export const articleSlice = createSlice({
     name: "articles",
@@ -7,6 +8,7 @@ export const articleSlice = createSlice({
         articles: [] as ArticleCard[],
         pendingArticles: [] as PendingArticle[],
         myArticles: [] as ArticleCard[],
+        article: {}
     },
     reducers: {
         setUpdatedArticles(state, action) {
@@ -21,8 +23,19 @@ export const articleSlice = createSlice({
             const updatedArticles = action.payload;
             state.myArticles = [...updatedArticles];
         },
+        setArticle(state, action) {
+            const article = action.payload;
+            state.article = {...article};
+        },
+        updateArticlesWithUpdatedArticle(state, action) {
+            const updatedArticle = action.payload;
+            const index = state.articles.findIndex(article => article.id === updatedArticle.id);
+            if (index !== -1) {
+                state.articles[index] = updatedArticle;
+            }
+        }
     },
 });
 
-export const { setUpdatedArticles, setPendingArticles, setMyLatestArticles } = articleSlice.actions;
+export const { setUpdatedArticles, setPendingArticles, setMyLatestArticles, setArticle, updateArticlesWithUpdatedArticle } = articleSlice.actions;
 
