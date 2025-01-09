@@ -44,7 +44,7 @@ function Slider({ className, children }: Props) {
         {isOverflow && (
             <button
             onClick={scrollLeft}
-            className="font-extrabold duration-300 opacity-0 group-hover:opacity-100 absolute left-0 bg-gray-400 text-white ms-1 py-2 px-4 rounded-full hover:bg-gray-500"
+            className="z-10 font-extrabold duration-300 opacity-0 group-hover:opacity-100 absolute left-0 bg-gray-400 text-white ms-1 py-2 px-4 rounded-full hover:bg-gray-500"
             >
             &lt;
             </button>

@@ -1,78 +1,78 @@
 interface LikeData {
-    userId: string,
-    userName: string,
-    userPic: string,
-    createdAt: string
+    userId: string;
+    userName: string;
+    userPic: string;
+    createdAt: string;
 }
 interface CommentData {
-    userId: string,
-    userName: string,
-    userPic: string,
-    content: string,
-    createdAt: string
+    userId: string;
+    userName: string;
+    userPic: string;
+    content: string;
+    createdAt: string;
 }
 
 interface UserInfo {
-    id?: string,
-    name: string,
-    email: string,
-    password?: string,
-    pic: string,
-    followingTopicsNames: string[],
-    savedArticlesIDs: string[],
-    isActive?: Boolean,
-    role: String,
-    createdAt?: string
-}
-
-interface ArticleCard {
-    id: string,
-    title: string,
-    thumbnail: string,
-    status?: 'pending' | 'approved' | 'refused',
-    refusingReason?: string,
-    likesCount: number,
-    likes?: LikeData[],
-    commentsCount: number,
-    authorId?: string,
-    authorName?: string,
-    authorPic?: string,
-    createdAt?: string,
-    topic?: string
+    id?: string;
+    name: string;
+    email: string;
+    password?: string;
+    pic: string;
+    followingTopicsNames: string[];
+    savedArticlesIDs: string[];
+    isActive?: Boolean;
+    role: String;
+    createdAt?: string;
 }
 
 interface PendingArticle {
-    id: string,
-    title: string,
-    content: string,
-    thumbnail: string,
-    authorName: string,
-    createdAt: string
+    id: string;
+    title: string;
+    content: string;
+    thumbnail: string;
+    authorName: string;
+    createdAt: string;
 }
 
 interface Article {
-    id: string,
-    title: string,
-    thumbnail?: string,
-    content: string,
-    likes: LikeData[],
-    comments: CommentData[],
-    topic: string,
-    status: 'pending' | 'approved' | 'refused',
-    authorId: string,
-    authorName: string,
-    authorPic: string,
-    createdAt: Date,
-    updatedAt: Date
+    id: string;
+    title: string;
+    thumbnail?: string;
+    content?: string;
+    outsourceArticleUrl?: string;
+    likes: LikeData[];
+    comments: CommentData[];
+    topic: string;
+    status: "pending" | "approved" | "refused";
+    authorId: string;
+    authorName: string;
+    authorPic: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+interface ArticleCard {
+    id: string;
+    title: string;
+    thumbnail: string;
+    status?: "pending" | "approved" | "refused";
+    refusingReason?: string;
+    likesCount: number;
+    likes?: LikeData[];
+    commentsCount: number;
+    authorId?: string;
+    authorName?: string;
+    authorPic?: string;
+    createdAt?: string;
+    topic?: string;
 }
 
-const INITIAL_USER_INFO : UserInfo = {
+const INITIAL_USER_INFO: UserInfo = {
     name: "",
     email: "",
     password: "",
     pic: "",
-    followingTopicsNames: [''],
-    savedArticlesIDs: [''],
+    followingTopicsNames: [""],
+    savedArticlesIDs: [""],
     role: "",
     createdAt: "",
 };
@@ -81,7 +81,7 @@ interface Topic {
     id: string;
     name: string;
     createdAt: Date;
-};
+}
 
 export type {
     LikeData,
@@ -90,8 +90,6 @@ export type {
     Topic,
     Article,
     ArticleCard,
-    PendingArticle
-}
-export {
-    INITIAL_USER_INFO,
-}
+    PendingArticle,
+};
+export { INITIAL_USER_INFO };

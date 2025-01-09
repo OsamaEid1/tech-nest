@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "@mui/material";
-import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
+import { fetchAllTopics } from 'app/helpers/topics/fetchAllTopics';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { setAllTopics } from "state/slices/topicsSlice";
@@ -37,11 +37,10 @@ const Tags = () => {
         }
     }, [pathname, allTopics])
 
-console.log(pathname);
     return (
         <div className="flex text-center space-x-2">
             <Tabs
-                value={2}
+                value={1}
                 variant="scrollable"
                 scrollButtons="auto"
                 allowScrollButtonsMobile

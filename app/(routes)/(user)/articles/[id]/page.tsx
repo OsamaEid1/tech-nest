@@ -8,6 +8,7 @@ import Loading from "@components/ui/Loading";
 import ArticleFooter from "./components/ArticleFooter";
 import useGetUserInfo from "app/helpers/hooks/user/useGetUserInfo";
 import { useAppSelector } from "state/hooks";
+import Link from "next/link";
 
 
 export default function Page() {
@@ -49,7 +50,7 @@ export default function Page() {
       {(loading || !article) && (<Loading />)}
       {error && (<span className="err-msg my-1">{error}</span>)}
       {article && (
-        <div className="">
+        <div className="bg-white p-5 rounded-main">
           <h1>{article.title}</h1>
           <Image 
             src={article?.thumbnail || '/assets/images/full-back-article.jpeg'} 
@@ -60,11 +61,22 @@ export default function Page() {
           />
           <hr className="my-5" />
           {/* Start Content */}
-          <div 
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          {article.content && (
+            <article 
+              dangerouslySetInnerHTML={{ __html: article.content }}
+            />
+          )}
+          {/* Start Article Url for Outsourced Articles */}
+          {article.outsourceArticleUrl && (
+            <Link href={article.outsourceArticleUrl}
+              target='_blank'
+              className={`block text-center font-semibold bg-blue-500 text-white ${article.status === 'pending' ? '' : '-mb-6'} p-3 rounded-main duration-300 hover:bg-blue-700`}
+            >
+              Go To Read The Article
+            </Link>
+          )}
           {/* End Content */}
-          {userInfo?.role !== 'ADMIN' && (
+          {userInfo?.role !== 'ADMIN' && article.status !== 'pending' && (
             <>
               <hr className="mb-5 mt-12" />
               <ArticleFooter

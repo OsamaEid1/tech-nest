@@ -27,11 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(500).json({ error: "There is an invalid data !" });
             }
 
-            const { title, content, topic, authorName, authorId, authorPic } = fields;
+            const { title, content, outsourceArticleUrl, topic, authorName, authorId, authorPic } = fields;
             const thumbnailFile = Array.isArray(files.thumbnailFile) ? files.thumbnailFile[0] : files.thumbnailFile;
 
             // Validate input
-            if (!title || !content || !topic || !authorId || (authorId && !authorId[0]) || !authorName || !authorPic) {
+            if (!title || !(content || outsourceArticleUrl) || !topic || !authorId || (authorId && !authorId[0]) || !authorName || !authorPic) {
                 console.error('there is an required fields missed!', title, content, thumbnailFile)
                 return res.status(400).json({ error: "Missing Required Fields!" });
             }
@@ -46,15 +46,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const article = await prisma.article.create({
                     data: {
                         title: title[0],
-                        content: content[0],
-                        thumbnail: thumbnailPath ? thumbnailPath : '',
+                        ...(content && content[0] && { content: content[0] }),
+                        ...(outsourceArticleUrl && outsourceArticleUrl[0] && { outsourceArticleUrl: outsourceArticleUrl[0] }),
+                        ...(thumbnailPath && { thumbnail: thumbnailPath }),
                         topic: topic[0],
                         authorName: authorName[0],
                         authorPic: authorPic[0],
                         authorId: authorId[0],
                         likes: [],
                         comments: [],
-                        status: 'pending'
+                        status: "pending",
                     },
                 });
     

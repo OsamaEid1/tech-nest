@@ -22,7 +22,7 @@ function Profile() {
                     id={userProfile?.id}
                     name={userProfile?.name}
                     pic={userProfile?.pic}
-                    followingTopics={userProfile?.followingTopicsNames}
+                    followingTopics={userProfile?.followingTopicsNames.length ? userProfile.followingTopicsNames : null}
                 />
             </div>
             {/* End Sidebar */}
@@ -31,6 +31,3 @@ function Profile() {
 }
 
 export default Profile;
-
-                                                    ""
-                                                ""

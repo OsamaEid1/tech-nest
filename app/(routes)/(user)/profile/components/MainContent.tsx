@@ -89,6 +89,7 @@ function MainContent({ userId, savedArticlesIDs }) {
                                 likesCount={article.likesCount}
                                 commentsCount={article.commentsCount}
                                 authorId={userId}
+                                bookmark={false}
                             />
                         ))
                     ) : (
@@ -127,11 +128,11 @@ function MainContent({ userId, savedArticlesIDs }) {
                             <MiniArticleCard
                                 key={indx}
                                 id={article.id}
-                                status={article.status}
                                 title={article.title}
                                 thumbnail={article.thumbnail}
                                 likesCount={article.likesCount}
                                 commentsCount={article.commentsCount}
+                                bookmark={true}
                             />
                         ))
                     ) : (
@@ -147,7 +148,7 @@ function MainContent({ userId, savedArticlesIDs }) {
                     )}
                 </Slider>
                 <Link
-                    href="articles/write"
+                    href="/"
                     className="block mt-3 text-right text-green-600 font-semibold underline duration-300 hover:no-underline"
                 >
                     Browse more articles?

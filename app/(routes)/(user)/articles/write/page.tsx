@@ -1,46 +1,52 @@
 'use client'
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import MainInput from "@components/ui/form/MainInput";
 import MainButton from "@components/ui/form/MainButton";
 import Loading from "@components/ui/Loading";
-import ReactQuill from "react-quill";
 import { useGetUserProfile } from "app/helpers/hooks/user/useGetUserProfile";
 import { writeArticle } from "app/helpers/user/article/writeArticle";
 import Popup from "@components/ui/Popup";
 import Link from "next/link";
 import { predictTheTopic } from "app/helpers/user/article/predictTheTopic";
-import { Autocomplete, Stack, TextField } from "@mui/material";
-import { Topic } from "app/helpers/constants";
+import { Autocomplete, TextField } from "@mui/material";
 import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
 import { useAppDispatch, useAppSelector } from "state/hooks";
 import { setAllTopics } from "state/slices/topicsSlice";
 
 // Dynamically import ReactQuill to handle SSR (react-quill requires a browser environment)
-// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const WriteSpace = dynamic(() => import("./components/WriteSpace"), { ssr: false });
 
-// Toolbar Options
-const quillModules = {
-    toolbar: [
-        [{ font: [] }],
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ color: [] }, { background: [] }],
-        ["blockquote", "code-block"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        ["link", "image"],
-        ["clean"],
-    ],
-};
 
 const WriteArticlePage = () => {
-    // Get User Profile To Use It In Store The Article Info
-    const {loading: userProfileLoading, error: userProfileErr, userProfile} = useGetUserProfile();
-    
+    // Article Editor Space
+    const [title, setTitle] = useState<string>("");
+    const [content, setContent] = useState<string>("");
+    const [articleAsText, setArticleAsSpace] = useState<string | null>(null);
+    // Handle Publishing The Article
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+    const [submitErr, setSubmitError] = useState<string| null>(null);
     // Handle Article Thumbnail
     const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+    // Handle Predict The Article's Topic
+    const [predictedTopic, setPredictedTopic] = useState<string | null>(null);
+    const [predictingLoading, setPredictingLoading] = useState<boolean>(false);
+    const [predictingErr, setPredictingErr] = useState<string | null>(null);
+    // Handle Choose The Article's Topic
+    const [showSearchTopicsBar, setShowSearchTopicsBar] = useState<boolean>(false);
+    const [chosenTopic, setChosenTopic] = useState<string | null>(null);
+    const [fetchAllTopicsLoading, setFetchAllTopicsLoading] = useState<boolean>(false);
+    const [fetchAllTopicsErr, setFetchAllTopicsErr] = useState<string | null>(null);
+    // Popup
+    const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
+
+
+    // Get User Profile To Use It In Store The Article Info
+    const {loading: userProfileLoading, error: userProfileErr, userProfile} = useGetUserProfile();
+    
+    // Article Thumbnail
     const handleUploadThumbnailFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -55,32 +61,7 @@ const WriteArticlePage = () => {
         }
     };
 
-    // Article Editor Space
-    const [title, setTitle] = useState<string>("");
-    const [content, setContent] = useState<string>("");
-    // Handle Publishing The Article
-    const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-    const [submitErr, setSubmitError] = useState<string| null>(null);
-    // Popup
-    const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
-
-    
-    
-    // Extract The Article Text to AI model can work with
-    const quillRef = useRef<ReactQuill | null>(null);
-    const handleGetText = () => {
-        if (quillRef.current) {
-            const quill = quillRef.current.getEditor();
-            const plainText = quill.getText();
-            if (plainText.trim() !== '')
-                return plainText;
-        }
-        return null;
-    };
-    // Handle Predict The Article's Topic
-    const [predictedTopic, setPredictedTopic] = useState<string | null>(null);
-    const [predictingLoading, setPredictingLoading] = useState<boolean>(false);
-    const [predictingErr, setPredictingErr] = useState<string | null>(null);
+    // Article's Topic Prediction
     const handlePredictTheTopic = async () => {
         setShowSearchTopicsBar(false);
         setChosenTopic(null);
@@ -89,11 +70,10 @@ const WriteArticlePage = () => {
         setFetchAllTopicsErr(null);
         
         try {
-            const articleText = handleGetText();
-            if (!articleText) 
+            if (!articleAsText) 
                 throw 'You must write an article first!'
             
-            const predictingTopic = await predictTheTopic(articleText);
+            const predictingTopic = await predictTheTopic(articleAsText);
             setPredictedTopic(predictingTopic);
         } catch (error: any) {
             setPredictingErr(error);
@@ -101,13 +81,10 @@ const WriteArticlePage = () => {
             setPredictingLoading(false);
         }
     };
+
     // Handle Choose The Article's Topic
     const dispatch = useAppDispatch();
     const allTopics = useAppSelector(state => state.topics.allTopics);
-    const [showSearchTopicsBar, setShowSearchTopicsBar] = useState<boolean>(false);
-    const [chosenTopic, setChosenTopic] = useState<string | null>(null);
-    const [fetchAllTopicsLoading, setFetchAllTopicsLoading] = useState<boolean>(false);
-    const [fetchAllTopicsErr, setFetchAllTopicsErr] = useState<string | null>(null);
     const handleGetAllTopics = async () => {
         if (!showSearchTopicsBar) {
             // Reset Predicted Topic
@@ -134,7 +111,6 @@ const WriteArticlePage = () => {
             setShowSearchTopicsBar(false);
         }
     };
-
 
     // Publish article Process
     const publishTheArticle = async () => {
@@ -192,7 +168,7 @@ const WriteArticlePage = () => {
 
 
     return (
-        <div className="max-w-4xl mt-[90px] mb-14 mx-auto px-8 py-4 bg-white rounded-main shadow shadow-shadows relative">
+        <>
             {isPopupOpened && <Popup
                 type="success"
                 onToggle={handlePopupToggle}
@@ -206,7 +182,6 @@ const WriteArticlePage = () => {
                 </Link>
             </Popup>
             }
-            <h1 className="mb-8 text-center font-mono text-secTextColor italic">Write Your Article</h1>
             {/* Article Thumbnail */}
             <div className="my-10 p-6 bg-white rounded-main shadow-lg flex items-center justify-between">
                 <div>
@@ -233,7 +208,7 @@ const WriteArticlePage = () => {
                         <img
                             src={thumbnailPreview}
                             alt="Thumbnail Preview"
-                            className="w-full h-48 object-cover rounded-main"
+                            className="w-full h-48 shadow object-cover rounded-main"
                         />
                     </div>
                 ) : (
@@ -251,14 +226,10 @@ const WriteArticlePage = () => {
             />
             {/* ReactQuill (Article Editor) */}
             <div className="h-96 mb-4">
-                <ReactQuill
-                    theme="snow"
-                    modules={quillModules}
-                    placeholder="Write your article..."
-                    className=" shadow-lg"
-                    value={content}
-                    ref={quillRef}
-                    onChange={setContent}
+                <WriteSpace
+                    content={content}
+                    setContent={setContent}
+                    setArticleAsText={setArticleAsSpace}
                 />
             </div>
             {/* Suggested / Write The Related Topic */}
@@ -314,7 +285,7 @@ const WriteArticlePage = () => {
             >
                 Publish
             </MainButton>
-        </div>
+        </>
     );
 };
 

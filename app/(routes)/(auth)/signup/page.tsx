@@ -46,7 +46,6 @@ const SignUp = () => {
         // Perform Signing Up
         try {
             const userInfo = await signUp(formData);
-            alert("You have successfully Signed Up !");
             dispatch(setUserInfo(userInfo));
             router.replace('/');
         } catch (error: any) {

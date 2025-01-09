@@ -3,8 +3,9 @@ import { ArticleCard } from "app/helpers/constants";
 export async function fetchRelatedArticles(topics: string[]) {
     try {
         // Construct the query string
-        const query = topics.length > 0 ? `?topics=${topics.join(",")}` : "";
-        const response = await fetch(`/api/user/article/get-related-articles${query}`, {
+        const query = topics.length > 0 ? `${topics.join(",")}` : "";
+        console.log(topics, query);
+        const response = await fetch(`/api/user/article/get-related-articles?topics=${encodeURIComponent(query)}`, {
             method: "GET",
         });
 

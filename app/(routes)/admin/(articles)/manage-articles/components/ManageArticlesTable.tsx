@@ -145,7 +145,7 @@ function ManageArticlesTable() {
                                 Title & Link
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Author Name
+                                publisher Name	
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Created At
@@ -178,7 +178,7 @@ function ManageArticlesTable() {
                                                 className="rounded-main"
                                             />
                                         ) : (
-                                            "Not found"
+                                            "No Thumbnail"
                                         )}
                                     </td>
                                     <th

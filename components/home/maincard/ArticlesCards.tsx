@@ -7,7 +7,7 @@ import { ArticleCard } from "app/helpers/constants";
 import Loading from "@components/ui/Loading";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "state/hooks";
-import { setUpdatedArticles } from "state/slices/articleSlice";
+import { setArticle, setUpdatedArticles } from "state/slices/articleSlice";
 
 
 export default function ArticlesCards() {
@@ -16,6 +16,7 @@ export default function ArticlesCards() {
   const targetTopic = pathname?.substring(1).replaceAll('-', ' ');
   // Fetch User profile to know user's following topics
   const { loading: profileLoading, error: profileErr, userProfile } = useGetUserProfile();
+
   // Fetch Articles States
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [fetchErr, setFetchErr] = useState<string | null>(null);
@@ -27,6 +28,7 @@ export default function ArticlesCards() {
   // Fetch Related Articles
   useEffect(() => {
     const fetchingData = async (targetTopics: string[]) => {
+      console.log("S",targetTopics);
       setFetchLoading(true);
       setFetchErr(null);
 
@@ -34,15 +36,20 @@ export default function ArticlesCards() {
           const fetchedArticles = await fetchRelatedArticles(targetTopics);
           setArticles(fetchedArticles);
           dispatch(setUpdatedArticles(fetchedArticles));
-      } catch (error: any) {
-        setFetchErr(error);
+        } catch (error: any) {
+          setFetchErr(error);
+          dispatch(setUpdatedArticles([]));
       } finally {
         setFetchLoading(false);
       }
     };
 
 
-    if (targetTopic && targetTopic !== '') fetchingData((targetTopic.charAt(0).toUpperCase() + targetTopic.slice(1).toLowerCase()).split(' '));
+    if (targetTopic && targetTopic !== '') fetchingData([
+        targetTopic
+            .split(" ")
+            .map((c) => c.charAt(0).toUpperCase() + c.slice(1)).join(" ")]
+    );
     else if (userProfile) fetchingData(userProfile.followingTopicsNames)
   }, [targetTopic, userProfile]);
   
@@ -53,10 +60,10 @@ export default function ArticlesCards() {
 
 
   
-  return (
+  return (  
     <div className="p-4">
       {(profileLoading || fetchLoading) && (<Loading />)}
-      {(profileErr || fetchErr) && <span className="err-msg my-3">{profileErr || fetchErr}</span>}
+      {(profileErr || fetchErr) && <span className="err-msg my-3 !text-black">{profileErr || fetchErr}</span>}
       {articles?.map((item) => (
         <Card
           key={item.id}

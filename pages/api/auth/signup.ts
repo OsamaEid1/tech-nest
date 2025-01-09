@@ -78,7 +78,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 // Set Token to Cookies
                 res.setHeader('Set-Cookie', serialize('token', token, {
-                    httpOnly: true, // Secure and HttpOnly cookie
                     secure: process.env.NODE_ENV === 'production', // set to true in production
                     sameSite: 'strict',
                     maxAge: 24 * 60 * 60, // 24 hours

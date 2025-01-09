@@ -1,9 +1,9 @@
 'use client'
 import Loading from "@components/ui/Loading";
 import Popup from "@components/ui/Popup";
-import { faComment, faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faComment, faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Diversity1 } from "@mui/icons-material";
+import { Bookmark, Diversity1 } from "@mui/icons-material";
 import { ArticleCard } from "app/helpers/constants";
 import { deleteMyArticle } from "app/helpers/user/article/deleteMyArticle";
 import Image from "next/image";
@@ -20,8 +20,10 @@ function MiniArticleCard({
    refusingReason,
    likesCount,
    commentsCount,
-   authorId
-}: ArticleCard) {
+   authorId,
+   // bookmarkInfo
+   bookmark
+}: ArticleCard & {bookmark: boolean}) {
    // Popup
    const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
    const [popupType, setPopupType] = useState<'delete' | 'success'>('delete');
@@ -29,6 +31,7 @@ function MiniArticleCard({
    // Delete Logical States
    const [deleteArticleLoading, setDeleteArticleLoading] = useState<boolean>(false);
    const [deleteArticleErr, setDeleteArticleErr] = useState<string | null>(null);
+
 
    // Set Updated My Articles
    const dispatch = useAppDispatch();
@@ -65,6 +68,35 @@ function MiniArticleCard({
       }
    };
 
+   /** Future feature (un bookmark the article in the same page) **/
+   // // Bookmark
+   // const [unBookmarkLoading, setUnBookmarkLoading] = useState<boolean>(false);
+   // const [unBookmarkErr, setUnBookmarkErr] = useState<string | null>(null);
+   // // Bookmark
+   // const unBookmark = (bookmarkedArticlesIDs) => {
+   //    const updatedBookmarkedIDs = bookmarkedArticlesIDs.filter(bookmarkedArticleId => bookmarkedArticleId !== id);
+   //    return updatedBookmarkedIDs;
+   // };
+   // const handleToggleBookmark = async () => {
+   //    setUnBookmarkErr(null);
+      
+   //    if (bookmarkInfo) {
+   //          let updatedSavedArticlesIDs: string[];
+   //          updatedSavedArticlesIDs = unBookmark(bookmarkInfo.savedArticlesIDs);
+
+   //          try {
+   //             const updatedUser = await updateSavedArticles(bookmarkInfo.id as string, updatedSavedArticlesIDs);
+   //             dispatch(setUserInfo(updatedUser));
+   //          } catch (error: any) {
+   //             setUnBookmarkErr(error);
+   //             setIsPopupOpened(true);
+   //          }
+   //    } else {
+   //          console.error("Error while bookmark the article, can't find the user profile");
+   //          setUnBookmarkErr('There is an error occurred, Please try again later!');
+   //    }
+   // };
+
    // Popup
    const handlePopupToggle = () => {
       // Reset
@@ -72,6 +104,7 @@ function MiniArticleCard({
       setPopupType("delete");
       setPopupText(`Are you sure with deleting this article (${title}) ?`);
    };
+
 
    return (
       <>
@@ -83,20 +116,27 @@ function MiniArticleCard({
                onToggle={handlePopupToggle}
                onConfirm={deleteTheArticle}
             >
-               {deleteArticleLoading && (<Loading />)}
-               {deleteArticleErr && <span className="p-2 bg-black/80 text-red-700 font-semibold">{deleteArticleErr}</span>}
+               {(deleteArticleLoading) && (<Loading />)}
+               {(deleteArticleErr) && <span className="p-2 bg-black/80 text-red-700 font-semibold">{deleteArticleErr}</span>}
             </Popup>
          )}
          <div className={`
-                     rounded-main relative
-                     ${status === 'pending' 
-                     ? 'shadow-[0px_1px_7px_0px_yellow]' 
-                     : status === 'refused' 
-                     ? 'shadow-[0px_1px_7px_0px_red]' 
-                     : 'shadow-[0px_1px_7px_0px_green]'}
-                  `}
+               rounded-main relative
+               ${status === 'pending' 
+               ? 'shadow-[0px_1px_7px_0px_yellow]' 
+               : status === 'refused' 
+               ? 'shadow-[0px_1px_7px_0px_red]' 
+               : 'shadow-[0px_1px_7px_0px_green]'}
+            `}
          >
-               {/* Remove Article Button  */}
+            {bookmark ? (
+                  <FontAwesomeIcon
+                     icon={faBookmark}
+                     className={`absolute top-2 right-2 z-10 text-blue-500`}
+                  />
+            )
+            : (
+               // Delete My Article
                <button className="absolute top-1 right-1 z-10"
                   onClick={handleDeleteArticle}
                >
@@ -105,6 +145,7 @@ function MiniArticleCard({
                      size='xs'
                   />
                </button>
+            )}
             <Link
                href={`articles/${id}`}
                target="_blank"
@@ -118,7 +159,7 @@ function MiniArticleCard({
                <Image
                   height={180}
                   width={250}
-                  src={thumbnail !== '' ? thumbnail : "/assets/images/full-back-article.jpeg"}
+                  src={thumbnail ? thumbnail : "/assets/images/full-back-article.jpeg"}
                   alt={title}
                   priority
                   className="w-[250px] h-[180px] rounded-main"
@@ -134,7 +175,7 @@ function MiniArticleCard({
                      {title}
                   </p>
                   {/* Likes & Comments Counts */}
-                  {status !== 'approved' ? (
+                  {status && status !== 'approved' ? (
                      <div className="text-white">
                         <p>
                            Status: 

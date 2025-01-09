@@ -1,6 +1,10 @@
 export const predictTheTopic = async (article: string) => {
     try {
+<<<<<<< HEAD
         const response = await fetch("https://be49-35-201-169-156.ngrok-free.app/classify", {
+=======
+        const response = await fetch("https://7422-35-189-18-94.ngrok-free.app/classify", {
+>>>>>>> f189509 (Add outSourceArticleUrl to Article model to accept)
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

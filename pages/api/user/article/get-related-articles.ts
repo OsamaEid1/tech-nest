@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from 'pages/lib/prisma';
+import { prisma } from 'pages/api/lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 : [];
 
             let articles;
-            if (topicsArray.length > 0) {
+            if (topicsArray.length > 0 && !(topicsArray.length === 1 && topicsArray[0] === '')) {
                 // Fetch articles that have matching topics
                 articles = await prisma.article.findMany({
                     where: {

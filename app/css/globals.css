@@ -132,3 +132,29 @@ a:active {
   border-bottom-left-radius: 0.75rem;
   max-height: calc(24rem - 43px);
 }
+
+/* Basic styles for the <code> tag */
+code {
+  background-color: #f3f4f6; /* Light gray background */
+  color: #d946ef; /* Purple text color */
+  font-family: 'Courier New', Courier, monospace; /* Monospace font */
+  font-size: 0.9em; /* Slightly smaller font size */
+  padding: 0.2em 0.4em; /* Padding inside the code tag */
+  border-radius: 12px; /* Rounded corners */
+  border: 1px solid #e5e7eb; /* Light border */
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  code {
+    background-color: #374151; /* Dark gray background */
+    color: #f472b6; /* Pink text color */
+    border-color: #4b5563; /* Darker border */
+  }
+}
+
+/* Hover effect (optional) */
+code:hover {
+  background-color: #e5e7eb; /* Slightly darker background on hover */
+  transition: background-color 0.2s ease; /* Smooth transition */
+}

@@ -3,7 +3,6 @@ import Header from "components/layout/Header";
 import ArticlesCards from "components/home/maincard/ArticlesCards";
 import Sidebar from "components/home/Sidebar";
 import Tags from "components/home/Tags";
-import Footer from 'components/layout/Footer';
 
 export default function Home() {
 
@@ -18,7 +17,7 @@ export default function Home() {
             </div>
             <ArticlesCards />
           </div>
-          <div className="sm:col-span-1 px-6 bg-white">
+          <div className="sm:col-span-1 px-6 bg-white min-h-screen">
             <Sidebar />
           </div>
         </div>

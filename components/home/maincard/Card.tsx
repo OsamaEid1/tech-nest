@@ -75,21 +75,21 @@ const CustomCard: React.FC<ArticleCard> = ({
     return (
         <Card className="flex items-center p-4 mt-8 mb-12 bg-transparent border-b-2 border-hovers pb-4 rounded-main hover:shadow-lg hover:shadow-shadows">
             <div className="flex-1 pr-4">
-                <div className="flex gap-2 mb-3">
-                    <Link href={`/profile/${authorId}`}>
-                        <Avatar
-                            alt={authorName}
-                            src={
-                                authorPic || "/assets/images/full-back-user.png"
-                            }
-                            sx={{ width: 50, height: 50 }}
-                            className="mr-2 border border-hovers"
-                        />
-                    </Link>
-                    <p className="text-gray-600 font-semibold capitalize text-xl">
+                <Link href={`/profile/${authorId}`}
+                    className="flex items-center w-fit gap-2 mb-3"
+                >
+                    <Avatar
+                        alt={authorName}
+                        src={
+                            authorPic || "/assets/images/full-back-user.png"
+                        }
+                        sx={{ width: 50, height: 50 }}
+                        className="mr-2 border border-hovers"
+                    />
+                    <span className="text-gray-600 font-semibold capitalize text-xl">
                         {authorName}
-                    </p>
-                </div>
+                    </span>
+                </Link>
 
                 {/* Updated Link to pass the ID */}
                 <Link href={`/articles/${id}`}>
@@ -152,7 +152,7 @@ const CustomCard: React.FC<ArticleCard> = ({
                     alt={title}
                     width={80}
                     height={80}
-                    className="w-full h-full object-cover rounded bg-gray-200"
+                    className="w-full h-full object-cover rounded bg-gray-200 shadow"
                 />
             </div>
         </Card>

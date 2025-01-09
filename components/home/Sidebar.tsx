@@ -45,7 +45,7 @@ export default function Sidebar() {
         <div className="flex flex-wrap gap-5">
           {userProfile?.followingTopicsNames?.length === 0 && (
             <span className="text-black bg-gray-300 px-3 py-1 rounded-2xl">
-              You're not follow any topics yet!
+              You don't follow any topics yet!
             </span>
           )}
           {userProfile?.followingTopicsNames?.map((item, index) => {

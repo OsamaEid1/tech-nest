@@ -59,13 +59,13 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                 const updatedUser = await updateSavedArticles(userProfile.id as string, updatedSavedArticlesIDs);
                 dispatch(setUserInfo(updatedUser));
                 setIsBookmarked(!isBookmarked);
-                setIsPopupOpened(true);
             } catch (error: any) {
                 setBookmarkErr(error);
+                setIsPopupOpened(true);
             }
         } else {
             console.error("Error while bookmark the article, can't find the user profile");
-            setBookmarkErr('There is an error occurred, please try refresh the page and try again later.');
+            setBookmarkErr('There is an error occurred, Please try again later!');
         }
     };
     
@@ -100,6 +100,7 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                 setIsLiked(!isLiked);
             } catch (error: any) {
                 setLikingErr(error);
+                setIsPopupOpened(true);
             }
         } else {
             console.error("Error while liking the article, can't find the user profile");
@@ -205,10 +206,10 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                     className="rounded-full bg-slate-200 border border-hovers"
                 />
                 <p className="font-semibold text-lg italic text-gray-700">
-                    Written By:{" "}
-                    <span className="text-black font-mono font-bold text-xl not-italic capitalize">
+                    Published By:{" "}
+                    <Link href={userProfile?.id ? `/profile/${userProfile.id}` : ''} className="text-black font-mono font-bold text-xl not-italic capitalize">
                         {authorName}
-                    </span>
+                    </Link>
                 </p>
             </div>
             {/* End Author Info  */}

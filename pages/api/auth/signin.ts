@@ -24,9 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
             
             if (!user) {
-                return res.status(401).json({ error: 'الإيميل أو الباسورد خطأ، أعد المحاولة' });
+                return res.status(401).json({ error: 'Email/Password is wrong, try again!' });
             } else if (!user.isActive) {
-                return res.status(401).json({ error: '!لقد خالفت القواعد لذا لم يعد بإمكانك الدخول على النظام' });
+                return res.status(401).json({ error: 'You break our rules, so you are not allow to be with us again.' });
             }
 
             // Verify the password
