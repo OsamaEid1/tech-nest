@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const DynamicTitle = ({ title }) => {
     useEffect(() => {
-        document.title = 'PS Hub | ' + title;
+        document.title = 'Tech Nest | ' + title;
     }, [title]);
 
     return null;

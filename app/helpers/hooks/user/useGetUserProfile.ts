@@ -33,7 +33,7 @@ export const useGetUserProfile = () => {
                 setLoading(false);
             }
         } else {
-            console.error("Can't get user cardinalities !")
+            console.error("Can't get user cardinalities !");
             setError("There is an error occurred, try again later, or try re sign in!");
         }
     };
@@ -43,10 +43,10 @@ export const useGetUserProfile = () => {
             setUserProfile(userInfoFromRedux);
             setLoading(false);
             setError(null);
-        } else if (!userCardinalitiesLoading && userCardinalities) {
+        } else if (!userCardinalitiesLoading) {
             handleFetchUserProfile();
         }
-    }, [userInfoFromRedux, userCardinalities]);
+    }, [userInfoFromRedux, userCardinalitiesLoading]);
 
     return { loading, error, userProfile };
 };

@@ -75,14 +75,13 @@ const CustomCard: React.FC<ArticleCard> = ({
     return (
         <Card className="flex items-center p-4 mt-8 mb-12 bg-transparent border-b-2 border-hovers pb-4 rounded-main hover:shadow-lg hover:shadow-shadows">
             <div className="flex-1 pr-4">
-                <Link href={`/profile/${authorId}`}
+                <Link
+                    href={`/profile/${authorId}`}
                     className="flex items-center w-fit gap-2 mb-3"
                 >
                     <Avatar
                         alt={authorName}
-                        src={
-                            authorPic || "/assets/images/full-back-user.png"
-                        }
+                        src={authorPic || "/assets/images/full-back-user.png"}
                         sx={{ width: 50, height: 50 }}
                         className="mr-2 border border-hovers"
                     />
@@ -153,6 +152,8 @@ const CustomCard: React.FC<ArticleCard> = ({
                     width={80}
                     height={80}
                     className="w-full h-full object-cover rounded bg-gray-200 shadow"
+                    quality={100}
+                    unoptimized
                 />
             </div>
         </Card>

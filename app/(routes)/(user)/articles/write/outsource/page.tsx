@@ -1,4 +1,5 @@
 'use client'
+import DynamicTitle from "@components/global/DynamicTitle";
 import MainButton from "@components/ui/form/MainButton";
 import MainInput from "@components/ui/form/MainInput";
 import Loading from "@components/ui/Loading";
@@ -121,6 +122,7 @@ function AddOutsourceArticle() {
 
     return (
         <>
+            <DynamicTitle title='Add OutSourced Article' />
             {isPopupOpened && (
                 <Popup type="success" onToggle={handlePopupToggle}>
                     <p>

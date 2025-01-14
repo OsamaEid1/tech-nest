@@ -1,4 +1,5 @@
 "use client"
+import DynamicTitle from "@components/global/DynamicTitle";
 import Loading from "@components/ui/Loading";
 import Popup from "@components/ui/Popup";
 import { INITIAL_USER_INFO } from "app/helpers/constants";
@@ -11,16 +12,7 @@ import { useAppDispatch, useAppSelector } from "state/hooks";
 import { addToUserInfoForm, setUserInfo } from "state/slices/userSlice";
 
 
-// Next
-// import type { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//     title: "PS Hub | Super Admin",
-// };
-
-const EditProfile = ({ params }) => {
-    if (!params.id) history.back();
-
+const EditProfile = () => {
     const [updateProfileLoading, setUpdateProfileLoading] = useState<boolean>(false);
     const [updateProfileErr, setUpdateProfileErr] = useState<string | null>(null);
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
@@ -31,7 +23,7 @@ const EditProfile = ({ params }) => {
     // Keep up with changes in the edit profile form
     const dispatch = useAppDispatch();
     const userInfoForm = useAppSelector(state => state.user.userInfoForm);
-
+    const router = useRouter();
     useEffect(() => {
         if (userProfile) {
             const {name, email} = {...userProfile};
@@ -64,7 +56,7 @@ const EditProfile = ({ params }) => {
         if (userProfile?.id) formData.append("id", userProfile.id);
         formData.append("name", userInfoForm.name);
         formData.append("email", userInfoForm.email);
-        formData.append("password", userInfoForm.password);
+        if (userInfoForm.password) formData.append("password", userInfoForm.password);
         if (picFile) formData.append("picFile", picFile);
         else if (userProfile) formData.append("picFile", userProfile.pic);
 
@@ -74,7 +66,7 @@ const EditProfile = ({ params }) => {
             const updatedUserInfo = await updateUserInfo(formData);
             setIsPopupOpened(true);
             const { name, email } = { ...updatedUserInfo };
-            console.log(name, email, updatedUserInfo);
+
             dispatch(addToUserInfoForm({name, email}));
             dispatch(setUserInfo(updatedUserInfo));
         } catch (error: any) {
@@ -86,6 +78,7 @@ const EditProfile = ({ params }) => {
 
     return (
         <div className="min-h-screen pb-5 flex justify-center items-center relative">
+            <DynamicTitle title='Edit Profile' />
             {isPopupOpened && (<Popup
                 type="success"
                 text="You have successfully updated your profile !"

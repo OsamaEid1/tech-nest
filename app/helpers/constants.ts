@@ -1,17 +1,3 @@
-interface LikeData {
-    userId: string;
-    userName: string;
-    userPic: string;
-    createdAt: string;
-}
-interface CommentData {
-    userId: string;
-    userName: string;
-    userPic: string;
-    content: string;
-    createdAt: string;
-}
-
 interface UserInfo {
     id?: string;
     name: string;
@@ -50,6 +36,20 @@ interface Article {
     createdAt: Date;
     updatedAt: Date;
 }
+interface LikeData {
+    userId: string;
+    userName: string;
+    userPic: string;
+    createdAt: string;
+}
+interface CommentData {
+    userId: string;
+    userName: string;
+    userPic: string;
+    content: string;
+    createdAt: string;
+}
+
 interface ArticleCard {
     id: string;
     title: string;
@@ -66,6 +66,12 @@ interface ArticleCard {
     topic?: string;
 }
 
+interface Topic {
+    id: string;
+    name: string;
+    createdAt: Date;
+}
+
 const INITIAL_USER_INFO: UserInfo = {
     name: "",
     email: "",
@@ -76,12 +82,6 @@ const INITIAL_USER_INFO: UserInfo = {
     role: "",
     createdAt: "",
 };
-
-interface Topic {
-    id: string;
-    name: string;
-    createdAt: Date;
-}
 
 export type {
     LikeData,

@@ -5,12 +5,13 @@ type PopupProps = {
     text?: string, 
     className?: string,
     options?: boolean,
+    overrideBtn?: boolean,
     onConfirm?: () => void,
     onToggle: () => void,
     children?: React.ReactNode
 };
 
-function Popup({ type, text, options, onConfirm, onToggle, className, children } : PopupProps) {
+function Popup({ type, text, options, overrideBtn, onConfirm, onToggle, className, children } : PopupProps) {
     // Set Styles based on the type of the Popup
     let styles = "bg-slate-500"
     let buttonYesStyles = ""
@@ -76,7 +77,7 @@ function Popup({ type, text, options, onConfirm, onToggle, className, children }
                                     </button>
                                 </>)
                             }
-                            {!options && (
+                            {(!options && !overrideBtn) && (
                                 <button type="button" 
                                     className={`
                                         bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300

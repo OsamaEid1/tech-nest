@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image';
-import { faBookmark as faBookmarkSolid, faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faBookmarkSolid, faHeart as faHeartSolid, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as faBookmarkRegular, faComment, faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -17,12 +17,13 @@ import { setArticle } from 'state/slices/articleSlice';
 import { updateArticleComments } from 'app/helpers/user/article/updateArticleComments';
 import Loading from '@components/ui/Loading';
 
-function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
+function ArticleFooter({ articleId, likes, comments, authorId, authorName, authorPic }) {
     // Popup
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
     // User Profile
     const dispatch = useAppDispatch();
     const {loading: userProfileLoading, error: userProfileErr, userProfile} = useGetUserProfile();
+    const [userNotSignedIn, setUserNotSignedIn] = useState<string | null>();
     // Bookmark
     const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
     const [bookmarkErr, setBookmarkErr] = useState<string | null>(null);
@@ -33,6 +34,8 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
     const [writtenComment, setWrittenComment] = useState<string>('');
     const [submitCommentLoading, setSubmitCommentLoading] = useState<boolean>(false);
     const [commentErr, setCommentErr] = useState<string | null>(null);
+    const [deleteCommentLoading, setDeleteCommentLoading] = useState<boolean>(false);
+    const [deleteCommentErr, setDeleteCommentErr] = useState<string | null>(null);
     
 
     // Bookmark
@@ -46,6 +49,11 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
         return updatedBookmarkedIDs;
     };
     const handleToggleBookmark = async () => {
+        if (userProfileErr) {
+            setUserNotSignedIn('You are not signed in, You must sign in first to be able to interact!');
+            setIsPopupOpened(true);
+            return;
+        }
         setBookmarkErr(null);
 
         if (userProfile) {
@@ -63,9 +71,6 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                 setBookmarkErr(error);
                 setIsPopupOpened(true);
             }
-        } else {
-            console.error("Error while bookmark the article, can't find the user profile");
-            setBookmarkErr('There is an error occurred, Please try again later!');
         }
     };
     
@@ -81,6 +86,11 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
     };
     const handleToggleLike = async () => {
         setLikingErr(null);
+        if (userProfileErr) {
+            setUserNotSignedIn('You are not signed in, You must sign in first to be able to interact!');
+            setIsPopupOpened(true);
+            return;
+        }
 
         if (userProfile) {
             let updatedLikesData: LikeData[];
@@ -102,15 +112,16 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                 setLikingErr(error);
                 setIsPopupOpened(true);
             }
-        } else {
-            console.error("Error while liking the article, can't find the user profile");
-            setLikingErr('There is an error occurred, please try refresh the page and try again later.');
-            setIsPopupOpened(true);
         }
     };
 
     // Comment
     const handleWriteComment = async () => {
+        if (userProfileErr){
+            setUserNotSignedIn('You are not signed in, You must sign in first to be able to interact!');
+            setIsPopupOpened(true);
+            return;
+        }
         setSubmitCommentLoading(true);
         setCommentErr(null);
 
@@ -132,11 +143,30 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
             } finally {
                 setSubmitCommentLoading(false);
             }
-        } else {
-            console.error("Error while commenting to the article, can't find the user profile");
-            setCommentErr('There is an error occurred, please try refresh the page and try again later.');
+        }
+    };
+
+    const removeComment = (commenterId, commentContent) => comments.filter(comment => (comment.content !== commentContent) && (comment.userId !== commenterId))
+    const handleDeleteTheComment = async (commenterId, commentContent) => {
+        if (userProfileErr){
+            setUserNotSignedIn('You are not signed in, You must sign in first to be able to interact!');
             setIsPopupOpened(true);
-            setSubmitCommentLoading(false);
+            return;
+        }
+        setDeleteCommentLoading(true);
+        setDeleteCommentErr(null);
+
+        if (userProfile) {
+            const updatedCommentsData = removeComment(commenterId, commentContent);
+                
+            try {
+                const updatedArticle = await updateArticleComments(articleId, updatedCommentsData);
+                dispatch(setArticle(updatedArticle));
+            } catch (error: any) {
+                setDeleteCommentErr(error);
+            } finally {
+                setDeleteCommentLoading(false);
+            }
         }
     };
 
@@ -147,9 +177,19 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
             {(isPopupOpened) && (
                 <Popup
                     type='delete'
-                    text={bookmarkErr || likingErr || ''}
+                    text={bookmarkErr || likingErr || commentErr || deleteCommentErr || userNotSignedIn || ''}
                     onToggle={() => setIsPopupOpened(false)}
-                />
+                    overrideBtn={userNotSignedIn ? true : false}
+                >
+                    {userNotSignedIn && (
+                        <Link href='/Sign In'
+                            className="
+                                bg-white text-green-500 shadow-shadows duration main py-2.5 px-5 rounded-main duration-300
+                                hover:bg-slate-200
+                            "
+                            >Go To Sign In</Link>
+                    )}
+                </Popup>
             )}
             {/* End Error Popup */}
             {/* Start Interactions */}
@@ -207,7 +247,7 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                 />
                 <p className="font-semibold text-lg italic text-gray-700">
                     Published By:{" "}
-                    <Link href={userProfile?.id ? `/profile/${userProfile.id}` : ''} className="text-black font-mono font-bold text-xl not-italic capitalize">
+                    <Link href={authorId ? `/profile/${authorId}` : '#'} className="text-black font-mono font-bold duration-300 hover:text-hovers text-xl not-italic capitalize">
                         {authorName}
                     </Link>
                 </p>
@@ -255,9 +295,20 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                                 <>
                                     <div
                                         key={indx}
-                                        className="shadow shadow-shadows rounded-main p-3"
+                                        className="shadow shadow-shadows rounded-main p-3 relative"
                                     >
-                                        <div className="flex gap-3 items-center">
+                                        {comment.userId === userProfile?.id && (
+                                            <>
+                                                {deleteCommentLoading && (<Loading className='rounded-main' />)}
+                                                <button
+                                                    className='absolute right-2'
+                                                    onClick={() => handleDeleteTheComment(comment.userId, comment.content)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} className="p-2 rounded-full duration-300 hover:bg-red-500 hover:text-white" />
+                                                </button>
+                                            </>
+                                        )}
+                                        <Link href={`/profile/${comment.userId}`} className="flex gap-3 items-center">
                                             <Image
                                                 src={
                                                     comment.userPic ||
@@ -269,10 +320,10 @@ function ArticleFooter({ articleId, likes, comments, authorName, authorPic }) {
                                                 loading='eager'
                                                 className="rounded-full bg-slate-200 border border-hovers"
                                             />
-                                            <p className="text-black font-mono font-bold text-xl">
+                                            <p className="text-black font-mono font-bold text-xl duration-300 hover:text-hovers">
                                                 {comment.userName}
                                             </p>
-                                        </div>
+                                        </Link>
                                         <p className="mt-3">
                                             {comment.content}
                                         </p>

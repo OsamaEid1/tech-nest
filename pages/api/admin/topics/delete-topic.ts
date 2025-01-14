@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await prisma.topics.delete({
             where: {
-                id: String(id)
+                id: String(id),
             },
         });
 

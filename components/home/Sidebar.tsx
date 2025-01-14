@@ -3,9 +3,6 @@ import Image from "next/image";
 import PersonIcon from "@mui/icons-material/Person";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import SettingsIcon from "@mui/icons-material/Settings";
-import HelpIcon from "@mui/icons-material/Help";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "state/hooks";
 

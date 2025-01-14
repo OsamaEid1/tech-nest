@@ -15,11 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const topics = await prisma.topics.findMany();
 
             const isTopicExist = () => {
-                return topics.some(t => t.name.toLowerCase() === name.toLowerCase());
+                return topics.some(
+                    (t) => t.name.toLowerCase() === name.toLowerCase()
+                );
             };
 
             if (isTopicExist()) {
-                return res.status(409).json({ error: "This topic already exist!" });
+                return res
+                    .status(409)
+                    .json({ error: "This topic already exist!" });
             }
 
             // Create a new topic

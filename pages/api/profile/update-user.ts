@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import path from "path";
 import * as formidable from "formidable";
 import fs from "fs"; // Import fs for file operations
@@ -46,6 +47,9 @@ export default async function handler(
                     where: { id: String(id[0]) },
                 });
 
+                if (!user)
+                    return res.status(404).json({ error: "There is an error occurred, please try again later!" });
+
                 // Handle image updates only if a new file is uploaded
                 if (picFile && picFile.filepath) {
                     const oldPicPath = user?.pic
@@ -74,7 +78,13 @@ export default async function handler(
 
                 if (email) data.email = String(email);
                 if (name) data.name = String(name);
-                if (password) data.password = String(password);
+                if (password) {
+                    // Hash the new password
+                    const hashedPassword = await bcrypt.hash(password[0], 10);
+                    data.password = String(hashedPassword);
+                } else {
+                    data.password = user.password; // Keep the existing password if no new one is provided
+                }
                 if (isActive !== undefined) data.isActive = isActive[0] === "true";
                 if (picFile) data.pic = newPicPath;
 

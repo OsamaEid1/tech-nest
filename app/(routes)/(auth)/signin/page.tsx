@@ -1,7 +1,6 @@
 "use client"
 import MainButton from "components/ui/form/MainButton";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Loading from "components/ui/Loading";
 import { useState } from "react";
 import MainInput from "components/ui/form/MainInput";
@@ -9,6 +8,7 @@ import Link from "next/link";
 import { signIn } from "app/helpers/auth/signIn";
 import { useAppDispatch } from "state/hooks";
 import { setUserInfo } from "state/slices/userSlice";
+import DynamicTitle from "@components/global/DynamicTitle";
 
 
 const SignIn = () => {
@@ -29,10 +29,10 @@ const SignIn = () => {
             // Handle redirection based on user role
             if (userInfo.role === "ADMIN") {
                 dispatch(setUserInfo(userInfo));
-                router.replace('/admin/manage-articles');
+                location.href = '/admin/manage-articles';
             } else if (userInfo.role === "USER") {
                 dispatch(setUserInfo(userInfo));
-                router.replace('/');
+                location.href = '/';
             }
         } catch (error: any) {
             console.log(error);
@@ -42,28 +42,32 @@ const SignIn = () => {
     };
 
 
-    return(
+    return (
         <div className="min-h-screen flex justify-center items-center relative">
+            <DynamicTitle title="Sign In" />
             <div className="main-card xl:w-[20vw]">
-                {loading && (<Loading className="rounded-main" />)}
+                {loading && <Loading className="rounded-main" />}
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign In</h2>
-                <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
-                    <MainInput 
-                        type="email" 
-                        placeholder="Email" 
+                <form
+                    className="flex flex-col text-center w-full"
+                    onSubmit={handleSubmit}
+                >
+                    <MainInput
+                        type="email"
+                        placeholder="Email"
                         inputStyles="mb-4"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required={true}
                     />
-                    <MainInput 
-                        type="password" 
+                    <MainInput
+                        type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPass(e.target.value)}
                         required={true}
                     />
-                    {error && <span className="err-msg mt-2">{ error }</span>}
+                    {error && <span className="err-msg mt-2">{error}</span>}
                     <MainButton
                         type="submit"
                         className="
@@ -74,15 +78,16 @@ const SignIn = () => {
                     >
                         Sign In
                     </MainButton>
-                    <Link href="/signup"
+                    <Link
+                        href="/signup"
                         className="text-sm text-left underline mt-2 duration-300 hover:text-hovers focus:outline-none"
                     >
-                        New User? Sign Up 
+                        New User? Sign Up
                     </Link>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default SignIn

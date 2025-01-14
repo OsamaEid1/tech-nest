@@ -8,7 +8,7 @@ export default function RootLayout({
     return (
         <>
             <Header />
-            <main className="mt-[65px]">
+            <main className="mt-[65px] mb-12">
                 {children}
             </main>
         </>

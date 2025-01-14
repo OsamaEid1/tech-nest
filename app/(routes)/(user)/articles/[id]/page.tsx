@@ -1,95 +1,55 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Image from "next/image";
 import { fetchArticleById } from "app/helpers/user/article/fetchArticleById";
-import { Article } from "app/helpers/constants";
-import Loading from "@components/ui/Loading";
-import ArticleFooter from "./components/ArticleFooter";
-import useGetUserInfo from "app/helpers/hooks/user/useGetUserInfo";
-import { useAppSelector } from "state/hooks";
-import Link from "next/link";
+import { Metadata } from "next";
+import WrapperClientPage from "./components/WrapperClientPage";
+import { notFound } from "next/navigation";
 
-
-export default function Page() {
-  const params = useParams();
-  if (!params?.id) history.back();
-  
-  // Fetch User Info, If User has role Admin then disappear the user info and interactions Sections
-  const {loading: userInfoLoading, userInfo} = useGetUserInfo();
-
-  // Fetch The Article
-  const [article, setArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const handleGetArticle = async (articleId: string) => {
-    setLoading(false);
-    setError(null);
+export async function generateMetadata({
+    params,
+}: {
+    params: { id: string };
+}): Promise<Metadata> {
+    if (!params.id) return { title: "Invalid Request" };
 
     try {
-      const article = await fetchArticleById(articleId);
-      setArticle(article);
-    } catch (error: any) {
-      setError(error);
-    } finally {
-      setLoading(false);
+      console.log(1);
+      const article = await fetchArticleById(params.id);
+      console.log(22,article);
+
+        if (!article) 
+            notFound();
+
+        return {
+            title: `TechNest | ${article.title}` || "TechNest",
+            description: article.description || "An interesting article.",
+            openGraph: {
+                title: `TechNest | ${article.title}` || "TechNest",
+                description: article.description || "An interesting article.",
+                images: [
+                    {
+                        url:
+                            `TechNest | ${article.title}` ||
+                            "/assets/images/full-back-article.jpeg",
+                        width: 800,
+                        height: 600,
+                        alt: "Article Thumbnail",
+                    },
+                ],
+            },
+            twitter: {
+                card: "summary_large_image",
+                title: `TechNest | ${article.title}` || "TechNest",
+                description: article.description || "An interesting article.",
+                images: [
+                    article.thumbnail || "/assets/images/full-back-article.jpeg",
+                ],
+            },
+        };
+    } catch (error) {
+        console.error("Error fetching article:", error);
+        notFound();
     }
-  };
-  useEffect(() => {
-    if (params?.id) handleGetArticle(params.id as string);
-  }, []);
+}
 
-  // Trigger Updates for Article (Likes, Comments, etc)
-  const updatedArticle = useAppSelector(state => state.articles.article);
-  useEffect(() => {
-    if (Object.keys(updatedArticle).length) setArticle(updatedArticle as Article);
-  }, [updatedArticle]);
-
-  return (
-    <div className="container lg:w-[800px] 2xl:w-[900px] mx-auto pt-10 pb-14 min-h-screen">
-      {(loading || !article) && (<Loading />)}
-      {error && (<span className="err-msg my-1">{error}</span>)}
-      {article && (
-        <div className="bg-white p-5 rounded-main">
-          <h1>{article.title}</h1>
-          <Image 
-            src={article?.thumbnail || '/assets/images/full-back-article.jpeg'} 
-            alt="Article Thumbnail" 
-            className="w-full rounded-main mt-4 mb-8 bg-gray-200"
-            width={400} 
-            height={400} 
-          />
-          <hr className="my-5" />
-          {/* Start Content */}
-          {article.content && (
-            <article 
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
-          )}
-          {/* Start Article Url for Outsourced Articles */}
-          {article.outsourceArticleUrl && (
-            <Link href={article.outsourceArticleUrl}
-              target='_blank'
-              className={`block text-center font-semibold bg-blue-500 text-white ${article.status === 'pending' ? '' : '-mb-6'} p-3 rounded-main duration-300 hover:bg-blue-700`}
-            >
-              Go To Read The Article
-            </Link>
-          )}
-          {/* End Content */}
-          {userInfo?.role !== 'ADMIN' && article.status !== 'pending' && (
-            <>
-              <hr className="mb-5 mt-12" />
-              <ArticleFooter
-                articleId={article.id}
-                authorName={article.authorName}
-                authorPic={article.authorPic}
-                likes={article.likes}
-                comments={article.comments}
-              />
-            </>
-          )}
-        </div>
-      )}
-    </div>
-  );
+export default function ReadArticlePage() {
+    return <WrapperClientPage />;
 }

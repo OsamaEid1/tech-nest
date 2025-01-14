@@ -145,6 +145,9 @@ function ManageArticlesTable() {
                                 Title & Link
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Topic
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 publisher Name	
                             </th>
                             <th scope="col" className="px-6 py-3">
@@ -186,7 +189,7 @@ function ManageArticlesTable() {
                                         className="px-6 py-3 text-left max-w-24 truncate"
                                     >
                                         <Link
-                                            href={`/articles/${article.id}`}
+                                            href={article.outsourceUrl ? article.outsourceUrl : `/articles/${article.id}`}
                                             target="_blank"
                                             className="underline block hover:text-hovers hover:no-underline group-hover:text-white"
                                             title={article.title}
@@ -194,6 +197,9 @@ function ManageArticlesTable() {
                                             {article.title || "Not Found"}
                                         </Link>
                                     </th>
+                                    <td scope="col" className="px-6 py-3">
+                                        {article.topic || "Not Found"}
+                                    </td>
                                     <td scope="col" className="px-6 py-3">
                                         {article.authorName || "Not Found"}
                                     </td>

@@ -1,4 +1,5 @@
 "use client"
+import DynamicTitle from "@components/global/DynamicTitle";
 import Loading from "@components/ui/Loading";
 import { signUp } from "app/helpers/auth/signUp";
 import { INITIAL_USER_INFO } from "app/helpers/constants";
@@ -47,7 +48,7 @@ const SignUp = () => {
         try {
             const userInfo = await signUp(formData);
             dispatch(setUserInfo(userInfo));
-            router.replace('/');
+            location.href = '/';
         } catch (error: any) {
             setError(error);
         } finally {
@@ -57,20 +58,21 @@ const SignUp = () => {
 
     return (
         <div className="min-h-screen  flex justify-center items-center relative">
+            <DynamicTitle title="Sign Up" />
             <div className="main-card">
-                {loading && (<Loading className="rounded-main" />)}
+                {loading && <Loading className="rounded-main" />}
                 <h2 className="font-extrabold mt-1 mb-8 text-4xl">Sign Up</h2>
-                <UserInfoForm 
-                    userInfo={INITIAL_USER_INFO}    
+                <UserInfoForm
+                    userInfo={INITIAL_USER_INFO}
                     setPicFile={setPicFile}
                     handleSubmit={handleSubmit}
                     loading={loading}
                     submitButtonText="Sign Up"
                 />
-                {error && <span className="err-msg mt-2">{ error }</span>}
+                {error && <span className="err-msg mt-2">{error}</span>}
             </div>
         </div>
-    )
+    );
 }
 
 export default SignUp;

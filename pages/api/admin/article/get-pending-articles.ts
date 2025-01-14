@@ -13,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     title: true,
                     thumbnail: true,
                     content: true,
+                    topic: true,
                     authorName: true,
                     createdAt: true,
                 },

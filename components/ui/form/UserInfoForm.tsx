@@ -48,6 +48,7 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
                 value={updatedUserInfo.password || userInfo?.password}
                 onChange={(e) => dispatch(addToUserInfoForm({password: e.target.value}))}
                 inputStyles="mb-4"
+                // required={true}
                 required={(userInfo.password && userInfo.password !== '') ? true : false}
                 />
             <MainInput 
@@ -57,6 +58,7 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
                 value={updatedUserInfo.rePassword}
                 onChange={(e) => dispatch(addToUserInfoForm({rePassword: e.target.value}))}
                 inputStyles="mb-4"
+                // required={true}
                 required={(userInfo.password && userInfo.password !== '') ? true : false}
             />
             <MainButton

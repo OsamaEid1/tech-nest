@@ -14,6 +14,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { fetchAllTopics } from "app/helpers/topics/fetchAllTopics";
 import { useAppDispatch, useAppSelector } from "state/hooks";
 import { setAllTopics } from "state/slices/topicsSlice";
+import DynamicTitle from "@components/global/DynamicTitle";
 
 // Dynamically import ReactQuill to handle SSR (react-quill requires a browser environment)
 const WriteSpace = dynamic(() => import("./components/WriteSpace"), { ssr: false });
@@ -169,6 +170,7 @@ const WriteArticlePage = () => {
 
     return (
         <>
+            <DynamicTitle title='Write Article' />
             {isPopupOpened && <Popup
                 type="success"
                 onToggle={handlePopupToggle}

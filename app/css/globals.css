@@ -134,7 +134,7 @@ a:active {
 }
 
 /* Basic styles for the <code> tag */
-code {
+code, pre {
   background-color: #f3f4f6; /* Light gray background */
   color: #d946ef; /* Purple text color */
   font-family: 'Courier New', Courier, monospace; /* Monospace font */
@@ -146,7 +146,7 @@ code {
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  code {
+  code, pre {
     background-color: #374151; /* Dark gray background */
     color: #f472b6; /* Pink text color */
     border-color: #4b5563; /* Darker border */

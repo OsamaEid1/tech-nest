@@ -15,7 +15,7 @@ function ProfileSidebar({ id, name, pic, followingTopics }) {
             />
             <h3 className="mt-5 mb-2 capitalize">{name || "User"}</h3>
             <Link
-                href={`edit-profile/${id}`}
+                href={'/edit-profile'}
                 className="duration-300 underline hover:no-underline hover:text-hovers"
             >
                 Edit Your Profile
