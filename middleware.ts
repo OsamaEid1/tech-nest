@@ -4,7 +4,7 @@ import getUserCardinalities from 'app/helpers/auth/getUserCardinalities';
 
 // Secret key for JWT verification (same key used for signing)
 const encoder = new TextEncoder();
-const SECRET_KEY = encoder.encode(process.env.SECRET_KEY || 'e87ae886e49904ac30df7b0d6c934d70be9598420512a159cf2d43ccfba7effaa900e801b7ce807deaa37150dd606b301da11b87441a1ecf0beee5243296313f');
+const SECRET_KEY = encoder.encode(process.env.SECRET_KEY);
 
 export async function middleware(req: NextRequest) {
     const tokenCookie = req.cookies.get('token');
