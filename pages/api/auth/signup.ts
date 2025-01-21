@@ -1,29 +1,33 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
+import { v2 as cloudinary } from 'cloudinary';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
-import path from 'path';
-import * as formidable from "formidable";
+import * as formidable from 'formidable';
+import fs from 'fs/promises';
 
 const prisma = new PrismaClient();
 
 const encoder = new TextEncoder();
-const SECRET_KEY = encoder.encode(process.env.SECRET_KEY || 'e87ae886e49904ac30df7b0d6c934d70be9598420512a159cf2d43ccfba7effaa900e801b7ce807deaa37150dd606b301da11b87441a1ecf0beee5243296313f');
+const SECRET_KEY = encoder.encode(process.env.SECRET_KEY);  
 
-// Formidable configuration to handle file upload
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Disable Next.js body parsing to handle file uploads manually
 export const config = {
     api: {
-        bodyParser: false, // Disables Next.js body parsing to handle file uploads manually
+        bodyParser: false,
     },
 };
 
-// Formidable instance with proper options for handling file uploads
-const form = new formidable.IncomingForm({
-    uploadDir: path.join(process.cwd(), '/public/uploads'), // Define upload directory
-    keepExtensions: true, // Keep file extension (e.g., .jpg, .png)
-    filename: (name, ext, path, form) => `${Date.now()}-${name}${ext}` // Customize the filename
-});
+// Formidable instance to handle file uploads
+const form = new formidable.IncomingForm();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -33,8 +37,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(500).json({ error: 'There was an error while uploading the picture, please try again' });
             }
 
-            let { name, email, password } = fields;
-            const picFile = files.picFile; // Get the profile picture file
+            const { name, email, password } = fields;
+            const picFile = files.picFile as formidable.File[]; // Get the profile picture file
 
             // Validate required fields
             if (!name || !email || !password || !picFile) {
@@ -50,10 +54,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (existingUser) {
                     return res.status(400).json({ error: 'This email is already in use' });
                 }
+
                 // Hash the password
                 const hashedPassword = await bcrypt.hash(password[0], 10);
-                // Store the image path in the public/uploads directory
-                const picPath = `/uploads/${picFile[0].newFilename}`; // Generate path for the image
+
+                // Upload image to Cloudinary
+                const result = await cloudinary.uploader.upload(picFile[0].filepath, {
+                    folder: 'tech-nest-users-profile-pics', // Organize images in a folder
+                });
 
                 // Create the new user
                 const user = await prisma.user.create({
@@ -61,11 +69,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         name: name[0],
                         email: email[0],
                         password: hashedPassword,
-                        pic: picPath, // Store the image path in the database
+                        pic: result.secure_url, // Store Cloudinary URL
                         followingTopicsNames: [], // Initialize as empty array
                         savedArticlesIDs: [], // Initialize as empty array
                         isActive: true, // By default, new users are active
-                        role: 'USER', // Default role, can be adjusted later if needed
+                        role: 'USER', // Default role
                     },
                 });
 
@@ -73,12 +81,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const token = jwt.sign(
                     { id: user.id, name: user.name, role: user.role }, // Include role in the payload
                     Buffer.from(SECRET_KEY),
-                    { expiresIn: '24h' }
+                    { expiresIn: "24h" }
                 );
 
                 // Set Token to Cookies
                 res.setHeader('Set-Cookie', serialize('token', token, {
-                    secure: process.env.NODE_ENV === 'production', // set to true in production
+                    secure: process.env.NODE_ENV === 'production', // Set to true in production
                     sameSite: 'strict',
                     maxAge: 24 * 60 * 60, // 24 hours
                     path: '/',
@@ -92,6 +100,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } catch (error) {
                 console.error('Error while creating the user:', error);
                 res.status(500).json({ error: 'There is an error, try again!' });
+            } finally {
+                // Clean up: Delete the temporary file after upload
+                if (picFile && picFile[0].filepath) {
+                    await fs.unlink(picFile[0].filepath).catch(console.error);
+                }
             }
         });
     } else {

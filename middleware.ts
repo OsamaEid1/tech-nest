@@ -64,7 +64,7 @@ export const config = {
         "/((?!articles/[\\w-]+$|profile/[\\w-]+$))",
 
         // Include everything else except explicitly excluded patterns
-        "/((?!_next/.*|api||uploads|favicon.ico|sitemap.xml|robots.txt).*)",
+        "/((?!_next/.*|api|uploads|favicon.ico|sitemap.xml|robots.txt).*)",
     ],
 };
 

@@ -19,7 +19,6 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
     const dispatch = useAppDispatch();
     const updatedUserInfo = useAppSelector(state => state.user.userInfoForm);
 
-
     return (
         <form className="flex flex-col text-center w-full" onSubmit={handleSubmit}>
             <ImageUploader storedPic={userInfo.pic} setPicFile={setPicFile} />
@@ -48,7 +47,7 @@ const UserInfoForm = memo(function UserInfoForm({ userInfo, handleSubmit, setPic
                 value={updatedUserInfo.password || userInfo?.password}
                 onChange={(e) => dispatch(addToUserInfoForm({password: e.target.value}))}
                 inputStyles="mb-4"
-                // required={true}
+                // required={true}  
                 required={(userInfo.password && userInfo.password !== '') ? true : false}
                 />
             <MainInput 

@@ -4,7 +4,6 @@ import Loading from "@components/ui/Loading";
 import { signUp } from "app/helpers/auth/signUp";
 import { INITIAL_USER_INFO } from "app/helpers/constants";
 import UserInfoForm from "components/ui/form/UserInfoForm";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "state/hooks";
 import { setUserInfo } from "state/slices/userSlice";
@@ -18,7 +17,6 @@ const SignUp = () => {
     const dispatch = useAppDispatch();
     const userInfoForm = useAppSelector(state => state.user.userInfoForm);
     
-    const router = useRouter();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // Reset
