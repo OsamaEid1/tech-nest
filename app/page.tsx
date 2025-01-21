@@ -3,11 +3,13 @@ import Header from "components/layout/Header";
 import ArticlesCards from "components/home/maincard/ArticlesCards";
 import Sidebar from "components/home/Sidebar";
 import Tags from "components/home/Tags";
+import DynamicTitle from "@components/global/DynamicTitle";
 
 export default function Home() {
 
   return (
     <div className="main-container">
+      <DynamicTitle title='Home' />
       <Header />
       <main className="min-h-[calc(100vh-100px)] mt-[63px]">
         <div className="grid grid-cols-4">

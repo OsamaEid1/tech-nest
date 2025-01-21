@@ -17,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 .json({ error: "There is an error occurred!" });
         }
 
-        console.log("HI ", savedArticlesIDsArray);
 
         try {
             // Fetch articles by savedArticlesIDs

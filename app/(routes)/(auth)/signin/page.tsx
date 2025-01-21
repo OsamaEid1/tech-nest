@@ -35,7 +35,7 @@ const SignIn = () => {
                 location.href = '/';
             }
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             setError(error);
             setIsLoading(false);
         }

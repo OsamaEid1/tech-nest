@@ -7,7 +7,7 @@ export type DecodedToken = {
 }
 
 const getUserCardinalities =
-    async (token: string, SECRET_KEY: Uint8Array): Promise<DecodedToken | null> => {
+    async (token: string, SECRET_KEY: any): Promise<DecodedToken | null> => {
         try {
             // Verify the token
             const { payload } = await jwtVerify(token, SECRET_KEY);

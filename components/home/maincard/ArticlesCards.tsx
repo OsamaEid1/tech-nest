@@ -28,7 +28,6 @@ export default function ArticlesCards() {
   // Fetch Related Articles
   useEffect(() => {
     const fetchingData = async (targetTopics: string[]) => {
-      console.log("S",targetTopics);
       setFetchLoading(true);
       setFetchErr(null);
 

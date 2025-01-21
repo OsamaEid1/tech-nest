@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const article = await prisma.article.findUnique({
                 where: { id: String(id) }
             });
-console.log("AAASDASDASDASDSADA",article);
+
             if (!article) 
                 return res.status(404).json({ error: "Article not found." });
 

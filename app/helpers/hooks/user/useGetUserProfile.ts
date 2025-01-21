@@ -34,6 +34,7 @@ export const useGetUserProfile = () => {
             }
         } else {
             console.error("Can't get user cardinalities !");
+            setLoading(false);
             setError("There is an error occurred, try again later, or try re sign in!");
         }
     };

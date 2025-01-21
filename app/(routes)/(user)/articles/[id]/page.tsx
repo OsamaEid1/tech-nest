@@ -11,9 +11,7 @@ export async function generateMetadata({
     if (!params.id) return { title: "Invalid Request" };
 
     try {
-      console.log(1);
-      const article = await fetchArticleById(params.id);
-      console.log(22,article);
+        const article = await fetchArticleById(params.id);
 
         if (!article) 
             notFound();

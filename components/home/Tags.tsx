@@ -36,7 +36,7 @@ const Tags = () => {
         setActiveTab(activeIndex >= 0 ? activeIndex + 2 : 0);
         }
     }, [pathname, allTopics])
-console.log(allTopics);
+
     return (
         <div className="flex text-center space-x-2">
             <Tabs

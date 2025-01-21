@@ -4,7 +4,6 @@ export async function fetchRelatedArticles(topics: string[]) {
     try {
         // Construct the query string
         const query = topics.length > 0 ? `${topics.join(",")}` : "";
-        console.log(topics, query);
         const response = await fetch(`/api/user/article/get-related-articles?topics=${encodeURIComponent(query)}`, {
             method: "GET",
         });

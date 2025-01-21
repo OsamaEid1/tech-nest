@@ -27,11 +27,14 @@ Welcome to **TechNest**, a cutting-edge platform designed for tech enthusiasts t
 4. [Our Team](#our-team)
 5. [Contributing](#contributing)
 6. [Video Demo and Documentation](#video-demo-and-documentation)
+7. [Account For Testing](#account-for-testing)
 ---
 
 ## Introduction
 
-TechNest is a platform built to foster a vibrant community of tech enthusiasts. It allows users to read, write, and interact with articles on various technology topics. The platform is designed to be intuitive, secure, and scalable, ensuring a seamless experience for all users.
+TechNest is a platform that works with AI where users can read, write, and interact with articles on various technology topics. Users can personalize their feed based on topics they follow, also they can write their own articles or share outsourced ones! 
+
+**During adding the article our AI model can predict the most relevant topic for that article based on the content**
 
 ---
 
@@ -122,9 +125,8 @@ TechNest is a platform built to foster a vibrant community of tech enthusiasts. 
 We are team of 5 students
 - Osama Eid - Frontend - Backend - Team Leader
 - Mazen Essam - Frontend
-- Ali Yasser - AI
+- Ali Samy - AI
 - Ayman Mostafa - Backend
-- Abdelrahman Mostafa - Backend
 
 ---
 
@@ -141,8 +143,16 @@ We welcome contributions from the community! To contribute to TechNest, follow t
 
 ## Video Demo and Documentation
 
-- For video demo that explain how it does works: [Video]()
-- For more details and snapshots for challenges that we have faced: [Documentation]()
+- For video demo that explain how it does works: [Video](https://drive.google.com/file/d/1dS2h3ItADJehGYYz9Q4smo0Gz3Vy440a/view?usp=sharing)
+- For more details and snapshots for challenges that we have faced: [Documentation](https://drive.google.com/file/d/1fvap41Gg9P5I3hK_8bNz9ZCyGU_uSKbc/view?usp=sharing)
+
+---
+
+## Account For Testing
+
+- For USER account you can test with:
+- Email: test2@gmail.com
+- Password: 0000
 
 ---
 
